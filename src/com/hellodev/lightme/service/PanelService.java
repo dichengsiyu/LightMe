@@ -50,7 +50,8 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 
 	private LauncherPanelManager mLauncherPanelManager;
 	private KeyguardPanelManager mKeyguardPanelManager;
-	private LauncherRefreshTimer mLaucherRefreshTimer;
+	private Timer mLauncherRefreshTimer;
+	private LauncherRefreshTask mLauncherRefreshTask;
 	private ActivityManager mActivityManager;
 	private Vibrator mVibrator;
 	private SystemReceiver mSystemReceiver;
@@ -81,7 +82,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				.getSystemService(Context.VIBRATOR_SERVICE);
 		
 		isKeyguardServiceAlive = isLauncherServiceAlive = false;
-		mLaucherRefreshTimer = new LauncherRefreshTimer(0, 1000);
+		mLauncherRefreshTimer = new Timer();
 		mShakeDetector = new ShakeDetector(appContext);
 		mShakeDetector.registerOnShakeListener(this);
 		mKeyguardManager = (KeyguardManager) appContext
@@ -253,7 +254,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 */
 	private void handleScreenOff() {
 		if (isLauncherServiceAlive && !isTelephoneCalling()) {
-			mLaucherRefreshTimer.cancelLauncherRefreshTask();
+			mLauncherRefreshTask.cancelSelf();
 			hideLauncherPanel();
 		}
 
@@ -294,7 +295,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			}
 		}
 
-		mLaucherRefreshTimer.startLauncherRefreshTask();
+		startLauncherRefreshTask(0, 1000);
 	}
 
 	private void startLauncherPanel() {
@@ -304,7 +305,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				mLauncherPanelManager = new LauncherPanelManager();
 			if (!isKeyguardScreen()) {
 				// 如果覆盖安装了，这个时候启动LauncherPanel不应该开始轮询，而应该等到user_present的时候
-				mLaucherRefreshTimer.startLauncherRefreshTask();
+				startLauncherRefreshTask(0, 1000);
 			}
 		}
 	}
@@ -312,7 +313,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	private void stopLauncherPanel() {
 		if (isLauncherServiceAlive) {
 			isLauncherServiceAlive = false;
-			mLaucherRefreshTimer.cancelLauncherRefreshTask();
+			mLauncherRefreshTask.cancelSelf();
 			// closePanel
 			mLauncherPanelManager.closePanel();
 			mLauncherPanelManager = null;
@@ -423,53 +424,43 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	private boolean isKeyguardScreen() {
 		return mKeyguardManager.isKeyguardLocked();
 	}
-
-	private class LauncherRefreshTimer extends Timer {
-		private Object TASK_LOCK = new Object();
+	
+	//FIXME 这个地方还是有闪动的情况
+	private void startLauncherRefreshTask(long delay, long period) {
+		if(mLauncherRefreshTask == null) {
+			mLauncherRefreshTask = new LauncherRefreshTask();
+		} else {
+			if(mLauncherRefreshTask.isRunning())
+				mLauncherRefreshTask.cancelSelf();
+			mLauncherRefreshTask = new LauncherRefreshTask();
+		}
+		
+		mLauncherRefreshTimer.schedule(mLauncherRefreshTask, delay, period);
+	}
+	
+	private class LauncherRefreshTask extends TimerTask {
 		boolean isLauncherTaskCanceledOrStoped = false;
-		long delay;
-		long period;
-
-		public LauncherRefreshTimer(long delay, long period) {
-			this.delay = delay;
-			this.period = period;
-			isLauncherTaskCanceledOrStoped = false;
-		}
-
-		void startLauncherRefreshTask() {
-			synchronized (TASK_LOCK) {
-				if(isLauncherServiceAlive) {
-					isLauncherTaskCanceledOrStoped = false;
-					this.scheduleAtFixedRate(getLauncherRefreshTask(), delay, period);
-				}
+		@Override
+		public void run() {
+			if (isLauncherTaskCanceledOrStoped) {
+				requestHideLauncherPanel();
+				this.cancel();
+			} else {
+				boolean isHome = isHome();
+				if (isHome && isHomeLastInterval == false)
+					requestShowLauncherPanel();
+				else if(isHome == false && isHomeLastInterval == true)
+					requestHideLauncherPanel();
 			}
 		}
-
-		void cancelLauncherRefreshTask() {
-			synchronized (TASK_LOCK) {
-				isLauncherTaskCanceledOrStoped = true;
-			}
+		
+		//isCurrent标记当前task是否需要被取代
+		void cancelSelf() {
+			isLauncherTaskCanceledOrStoped = true;
 		}
-
-		private TimerTask getLauncherRefreshTask() {
-			return new TimerTask() {
-
-				@Override
-				public void run() {
-					synchronized (TASK_LOCK) {
-						if (isLauncherTaskCanceledOrStoped) {
-							requestHideLauncherPanel();
-							this.cancel();
-						} else {
-							boolean isHome = isHome();
-							if (isHome && isHomeLastInterval == false)
-								requestShowLauncherPanel();
-							else if(isHome == false && isHomeLastInterval == true)
-								requestHideLauncherPanel();
-						}
-					}
-				}
-			};
+		
+		boolean isRunning() {
+			return !isLauncherTaskCanceledOrStoped;
 		}
 	}
 	
