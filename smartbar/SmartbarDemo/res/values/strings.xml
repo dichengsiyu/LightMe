@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, SmartBarDemoActivity!</string>
+    <string name="app_name">SmartBarDemo</string>
+    
+    <string name="readme_for_tabs">SmartBar 实现tab界面：</string>
+    <string name="btn_for_tabs">Tab 界面</string>
+    
+    <string name="readme_for_action_item_tab">此方法可兼容原生系统：</string>
+    <string name="btn_for_action_item_tab">通过Action Item 实现</string>
+    
+    <string name="readme_for_action_bar_tab">原生系统Actionbar Tab显示在屏幕上方：</string>
+    <string name="btn_for_action_bar_tab">通过Actionbar Tab 实现</string>
+    
+    <string name="readme_for_action_bar_tab_and_tabhost">此方法代码切换使用TabHost或ActionTab：</string>
+    <string name="btn_for_action_bar_tab_and_tabhost">通过Actionbar Tab 与TabHost 实现</string>
+    
+    <string name="readme_for_action_item">ActionBar List导航及Item 普通用法：</string>
+    <string name="btn_for_action_item">ActionBar List Navigation Mode</string>
+        
+    <string name="readme_for_action_bar_top">ActionBar 顶栏不显示：</string>
+    <string name="btn_for_action_bar_top">ActionBar Top 隐藏</string>
+    
+    <string name="readme_for_action_mode_top">ActionMode 顶栏不显示：</string>
+    <string name="btn_for_action_mode_top">ActionMode Top 隐藏</string>
+    
+    <string name="readme_for_customtab_on_top">类似Meizu应用中心，顶栏与底栏同时使用Tab的示例：</string>
+    <string name="btn_for_customtab_on_top">顶栏与底栏同时使用Tab</string>
+    
+    <string name="readme_for_has_smartbar">判断本机是否有SmartBar：</string>
+    <string name="btn_for_has_smartbar">判断有无SmartBar</string>
+    
+    <string name="readme_action_bar_style">ActionBar自定义样式，如背景，overflow menu图标等：</string>
+    <string name="action_bar_style">ActionBar自定义样式</string>
+    
+    <string name="readme_custom_back_btn">自定义back键图标：</string>
+    <string name="custom_back_btn">自定义back键图标</string>
+    
+
+</resources>

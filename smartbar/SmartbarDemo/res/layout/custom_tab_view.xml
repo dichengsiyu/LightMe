@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#4c8599"
+        android:layout_marginLeft="20dip"
+        android:paddingBottom="1dip"
+        android:layout_centerVertical="true"
+        android:text="CustomTab"/>
+    
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="true" >
+        <RelativeLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tab_text_1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="TAB1"
+                android:paddingRight="8dip"
+                android:paddingLeft="8dip"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:clickable="true"
+                android:onClick="onTabClick" />
+            
+            <ImageView
+                android:id="@+id/scroll_1"
+                android:layout_width="wrap_content"
+                android:layout_height="3dip"
+                android:background="@drawable/view_pager_scroll"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@id/tab_text_1"
+                android:layout_alignRight="@id/tab_text_1" />
+        </RelativeLayout>
+        
+        <RelativeLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tab_text_2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="TAB2"
+                android:paddingRight="8dip"
+                android:paddingLeft="8dip"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:clickable="true"
+                android:onClick="onTabClick" />
+            
+            <ImageView
+                android:id="@+id/scroll_2"
+                android:layout_width="wrap_content"
+                android:layout_height="3dip"
+                android:background="@drawable/view_pager_scroll"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@id/tab_text_2"
+                android:layout_alignRight="@id/tab_text_2" />
+        </RelativeLayout>
+        
+        <RelativeLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tab_text_3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="TAB3"
+                android:paddingRight="8dip"
+                android:paddingLeft="8dip"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:clickable="true"
+                android:onClick="onTabClick" />
+            
+            <ImageView
+                android:id="@+id/scroll_3"
+                android:layout_width="wrap_content"
+                android:layout_height="3dip"
+                android:background="@drawable/view_pager_scroll"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@id/tab_text_3"
+                android:layout_alignRight="@id/tab_text_3" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:src="#2db5e5" />
+    
+</RelativeLayout>

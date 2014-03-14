@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/readme_for_action_item_tab"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+    
+    <Button android:id="@+id/btn_action_item_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_for_action_item_tab"
+        android:onClick="onClick" />
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/readme_for_action_bar_tab"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+    
+    <Button android:id="@+id/btn_action_bar_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_for_action_bar_tab"
+        android:onClick="onClick" />
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/readme_for_action_bar_tab_and_tabhost"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+    
+    <Button android:id="@+id/btn_action_bar_tab_and_tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_for_action_bar_tab_and_tabhost"
+        android:onClick="onClick" />
+    
+ </LinearLayout>

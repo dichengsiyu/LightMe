@@ -1,0 +1,35 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="CustomSmartBarTheme" parent="@android:style/Theme.DeviceDefault.Light">
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
+    </style>
+
+    <style name="CustomActionBar" parent="@android:style/Widget.DeviceDefault.ActionBar">
+        <item name="android:background">@drawable/action_bar_bg</item>
+        <item name="android:backgroundSplit">@drawable/action_bar_bg</item>
+        <item name="android:actionOverflowButtonStyle">@style/ActionbarOverFlowStyle</item>
+    </style>
+
+    <style name="ActionbarOverFlowStyle" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/button_back</item>
+    </style>
+
+    <style name="info_popu_anim">
+        <item name="@android:windowExitAnimation">@anim/info_popup_anim_exit</item>
+    </style>
+
+    <style name="panel_anim">
+        <item name="@android:windowEnterAnimation">@anim/panel_enter</item>
+        <item name="@android:windowExitAnimation">@anim/panel_exit</item>
+    </style>
+
+    <style name="keyguard_panel_anim">
+        <item name="@android:windowExitAnimation">@anim/keyguard_panel_exit</item>
+    </style>
+
+    <style name="clear_panel_anim">
+        <item name="@android:windowEnterAnimation">@anim/clear_panel_enter</item>
+        <item name="@android:windowExitAnimation">@anim/clear_panel_exit</item>
+    </style>
+
+</resources>

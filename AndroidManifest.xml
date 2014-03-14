@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hellodev.lightme"
+    android:versionCode="1"
+    android:versionName="1.0.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.Manifest.permission.INJECT_EVENTS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SENSOR_INFO" />
+    <uses-permission android:name="android.permission.SENSOR_ENABLE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
+    </uses-permission>
+
+    <application
+        android:name="com.hellodev.lightme.FlashApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.DeviceDefault.Light"
+        android:uiOptions="splitActionBarWhenNarrow" >
+        <activity
+            android:name="com.hellodev.lightme.activity.GuideActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomSmartBarTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.hellodev.lightme.activity.MainActivity"
+            android:icon="@drawable/ic_logo"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomSmartBarTheme" >
+        </activity>
+        <activity
+            android:name="com.hellodev.lightme.activity.SettingActivity"
+            android:icon="@drawable/ic_logo"
+            android:label="@string/setting"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.hellodev.lightme.activity.AboutActivity"
+            android:icon="@drawable/ic_logo"
+            android:label="@string/about"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <service
+            android:name="com.hellodev.lightme.service.PanelService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="hellodev.service.action.KEYGUARD" />
+                <action android:name="hellodev.service.action.LAUNCHER" />
+                <action android:name="hellodev.service.action.PANEL_SERVICE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.hellodev.lightme.service.ControlService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="hellodev.service.action.AUTO_CLOSE" />
+                <action android:name="hellodev.service.action.CHECK_LISENSE" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name="com.hellodev.lightme.receiver.SystemReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5314987c56240b0b610e83e0" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Meizu" />
+    </application>
+
+</manifest>

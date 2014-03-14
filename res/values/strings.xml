@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <string name="app_name">LightMe</string>
+    <string name="app_description">是助手，更是朋友</string>
+    
+    <string name="members_title">我和我的小伙伴们</string>
+    
+    <string name="clear_panel">清除</string>
+    
+    <string name="guide_main">小伙伴，滑 ↓ 滑</string>
+    <string name="guide_keyguard">正经的摇一次？</string>
+    
+    <string name="alert_auto_close_title">让闪光灯休息一下吧</string>
+    <string name="alert_auto_close_message">“自动关灯”保护功能将定时关闭长时间工作的闪光灯。</string>
+    <string name="alert_auto_close_positive">休息一下</string>
+    <string name="alert_auto_close_neutral">调整设置</string>
+    <string name="alert_auto_close_negetive">重新打开</string>
+    
+    <string name="alert_auto_close_confirm_title">小伙伴确定要关闭“自动关灯”功能？</string>
+    <string name="alert_auto_close_confirm_message">“自动关灯”功能将定时关闭长时间工作的闪光灯,为小伙伴保护闪光灯。建议开启。</string>
+    <string name="alert_auto_close_confirm_positive">确认关闭</string>
+    <string name="alert_auto_close_confirm_negetive">重新打开</string>
+    
+    <string name="alert_lock_title">LightMe锁住了</string>
+    <string name="alert_lock_message">T.T 小伙伴的LightMe为甚么锁住了？</string>
+    <string name="alert_lock_positive">购买或更新</string>
+    <string name="alert_lock_neutral">联系\"客服\"</string>
+    <string name="alert_lock_negetive">我再想想</string>
+    
+    <string name="setting">设置</string>
+    <string name="setting_flash">闪光灯设置</string>
+    <string name="setting_flash_auto_close">自动关灯</string>
+    <string name="setting_flash_auto_close_time">自动关灯时间</string>
+    <string name="setting_control">操作设置</string>
+    <string name="setting_control_show_launcher_panel">显示桌面悬浮开关</string>
+    <string name="setting_control_show_keyguard_panel">显示锁屏开关</string>
+    <string name="setting_control_enable_keyguard_shock">开启锁屏摇动</string>
+    <string name="setting_control_enable_switch_sound">开关声音</string>
+    <string name="more">更多</string>
+    <string name="to_be_continue">更多精彩，敬请期待</string>
+    
+    <string name="about">关于</string>
+    <string name="feedback">反馈</string>
+    <string name="share">分享你的感受</string>
+    <string name="market">应用中心</string>
+    
+    <string name="auto_close_value">%1$d分钟</string>
+    <string name="copyright">\u00A92014 dichengsiyu</string>
+    
+    <string name="format_version_v">V %1$s</string>
+    <string name="format_version_banben">版本 %1$s</string>
+    
+    <string name="share_subject">我的感受</string>
+    <string name="feedback_subject">意见和建议</string>
+    <string name="feedback_content_default">分享感受，参与改变~</string>
+    
+   	<string name="lock_subject">LightMe锁住了</string>
+    <string name="lock_content_default">我的LightMe锁住了，因为%1$s</string>
+    
+    <string name="notification_laucher_panel_open_title">桌面浮动开关</string>
+    <string name="notification_laucher_panel_open_content">开关仅在桌面显示，长按有惊喜</string>
+    <string name="notification_laucher_panel_open_ticker">桌面浮开关已打开</string>
+    
+    <string name="notification_keyguard_panel_open_title">锁屏开关</string>
+    <string name="notification_keyguard_panel_open_content">开关仅在锁屏界面显示，长按有惊喜</string>
+    <string name="notification_keyguard_panel_open_ticker">锁屏开关已打开</string>
+    
+    <string name="notification_keyguard_shock_enable_title">锁屏摇动</string>
+    <string name="notification_keyguard_shock_enable_content">开屏大胆摇，灭屏放心走</string>
+    <string name="notification_keyguard_shock_enable_ticker">锁屏摇动已开启</string>
+    
+    <string name="notification_lisense_error_title">小伙伴的LightMe锁住了</string>
+    <string name="notification_lisense_error_content">如有疑问请第一时间联系我们</string>
+    <string name="notification_lisense_error_ticker">LightMe锁住了</string>
+    
+    <string name="lisense_state_trying">^_^ 试用ing</string>
+    <string name="lisense_state_expired">试用过期了 T.T</string>
+    <string name="lisense_state_unknown">证书出错了 T.T</string>
+    
+    <string-array name="auto_close_time_choice">
+        <item>2分钟</item>
+        <item>5分钟</item>
+        <item>10分钟</item>
+    </string-array>
+    <string-array name="auto_close_time_choice_mins">
+        <item>2</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
+    <array name="abouts">
+        <item>时间线</item>
+        <item>功能介绍</item>
+        <item>系统通知</item>
+    </array>
+</resources>

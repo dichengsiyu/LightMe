@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="RoundProgressBar">
+        <attr name="roundColor" format="color" />
+        <attr name="roundProgressColor" format="color" />
+        <attr name="roundWidth" format="dimension" />
+        <attr name="isCenterTextDisplayable" format="boolean" />
+        <attr name="centerTextColor" format="color" />
+        <attr name="centerTextSize" format="dimension" />
+        <attr name="progressMax" format="integer" />
+        <attr name="progressLast" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="SeekPreference">
+        <attr name="maxProgress" format="integer"/>
+        <attr name="minProgress" format="integer"/>
+        <attr name="progressIncrement" format="integer"/>
+        <attr name="progressRate" format="integer"/>
+    </declare-styleable>
+
+</resources>

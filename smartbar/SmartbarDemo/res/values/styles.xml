@@ -1,0 +1,18 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <style name="CustomTheme" parent="@android:style/Theme.DeviceDefault.Light">
+        <item name="android:actionOverflowButtonStyle">@style/CustomActionButtonOverflow</item>   
+         <item name="android:actionBarStyle">@style/CustomActionBar</item>
+        
+    </style>
+    
+    <style name="CustomActionButtonOverflow" parent="@android:style/Widget.DeviceDefault.Light.ActionButton.Overflow">
+        <item name="android:src">@android:drawable/ic_menu_info_details</item>
+    </style>
+    
+    <style name="CustomActionBar" parent="@android:style/Widget.DeviceDefault.Light.ActionBar">
+        <item name="android:background">@drawable/action_bar_bg</item>
+        <item name="android:backgroundSplit">@drawable/action_bar_bg</item>
+    </style>
+    
+</resources>

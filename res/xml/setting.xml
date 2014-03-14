@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android_custom="http://schemas.android.com/apk/res/com.hellodev.lightme"
+    android:key="preference_setting"
+    android:title="@string/setting" >
+
+    <PreferenceCategory android:title="@string/setting_control" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enable_switch_sound"
+            android:title="@string/setting_control_enable_switch_sound" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="show_launcher_panel"
+            android:title="@string/setting_control_show_launcher_panel" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="show_keyguard_panel"
+            android:title="@string/setting_control_show_keyguard_panel" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="show_keyguard_panel"
+            android:key="enable_keyguard_shock"
+            android:title="@string/setting_control_enable_keyguard_shock" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/setting_flash" >
+        <com.hellodev.lightme.view.SeekPreference
+            android:key="auto_close_time"
+            android:persistent="true"
+            android:layout="@layout/preference_auto_close_time"
+            android:title="@string/setting_flash_auto_close_time"
+            android_custom:maxProgress="200"
+            android_custom:minProgress="20"
+            android_custom:progressIncrement="1"
+            android_custom:progressRate="10" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/more" >
+        <PreferenceScreen
+            android:key="about"
+            android:title="@string/about">
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="market"
+            android:title="@string/market">
+        </PreferenceScreen>
+        <PreferenceScreen android:key="version"></PreferenceScreen>
+    </PreferenceCategory>
+
+</PreferenceScreen>

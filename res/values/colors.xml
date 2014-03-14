@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+    <color name="gray">#888888</color>
+    <color name="black">#000000</color>
+    <color name="clear_panel_focus">#33ff1111</color>
+    <color name="clear_panel_normal">#33111111</color>
+    <color name="transparent">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="flash">#ffd200</color>
+    
+    <color name="about_app_description">#88888888</color>
+    <color name="about_member_description">#999999</color>
+</resources>

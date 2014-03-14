@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<group android:id="@+id/tab_group">
+	    <item
+	        android:id="@+id/tab_menu_recent"
+	        android:icon="@drawable/ic_tab_recent"
+	        android:showAsAction="always"
+	        android:title="recent"/>
+	    <item
+	        android:id="@+id/tab_menu_contacts"
+	        android:icon="@drawable/ic_tab_contacts"
+	        android:showAsAction="always"
+	        android:title="contacts"/>
+	    <item
+	        android:id="@+id/tab_menu_dialer"
+	        android:icon="@drawable/ic_tab_dialer"
+	        android:showAsAction="always"
+	        android:title="dialer"/>
+ 	</group>
+ 	
+    <item
+        android:id="@+id/tab_menu_settings"
+        android:icon="@drawable/action_bar_bg"
+        android:showAsAction="never"
+        android:title="settings"/>
+   
+</menu>
