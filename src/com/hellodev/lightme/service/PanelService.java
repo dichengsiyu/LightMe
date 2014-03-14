@@ -145,6 +145,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		mSystemReceiver = null;
 		mPrefsManager = null;
 		
+		if(mShakeDetector != null) {
+			mShakeDetector.removeOnShakeListener(this);
+		}
+		
 		//关闭监听
 		if(mTelephonyManager != null) {
 			mTelephonyManager.listen(mPhoneStateListener
@@ -231,8 +235,9 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 					mKeyguardPanelManager.hidePanel();
 				} else {
 					mKeyguardPanelManager.showPanel();//灭屏、亮屏都show
-					if (mPrefsManager.isKeyguardShockEnable())
+					if (mPrefsManager.isKeyguardShockEnable()) {
 						mShakeDetector.start();
+					}
 				}
 				
 				//锁屏界面需要监听电话状态
@@ -294,8 +299,9 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 						, PhoneStateListener.LISTEN_NONE);
 			}
 		}
-
-		startLauncherRefreshTask(0, 1000);
+		
+		if(isLauncherServiceAlive)
+			startLauncherRefreshTask(0, 1000);
 	}
 
 	private void startLauncherPanel() {
@@ -378,14 +384,19 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			isKeyguardServiceAlive = false;
 			mKeyguardPanelManager.closePanel();
 			mKeyguardPanelManager = null;
+			
+			//如果是可以摇动的时候
 			mShakeDetector.stop();
-			mShakeDetector.removeOnShakeListener(this);
 		}
 	}
 
 	private boolean isHome() {
-		List<RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
-		return getHomes().contains(tasks.get(0).topActivity.getClassName());
+		boolean isHome = false;
+//		if(mActivityManager != null) {
+			List<RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
+			isHome = getHomes().contains(tasks.get(0).topActivity.getClassName());
+//		}
+		return isHome;
 	}
 
 	private List<String> getHomes() {
