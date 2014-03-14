@@ -66,7 +66,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	private boolean isHomeLastInterval = false;
 	
 	private MLisenseMangaer lisenseManager;
-	private boolean isLisenseEnable = true;
 
 	@Override
 	public void onCreate() {
@@ -87,14 +86,19 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		mShakeDetector.registerOnShakeListener(this);
 		mKeyguardManager = (KeyguardManager) appContext
 				.getSystemService(Context.KEYGUARD_SERVICE);
+		//这个只在锁屏界面才需要监听
 		mPhoneStateListener = new PhoneStateListener() {
 			@Override
 			public void onCallStateChanged(int state,
 					String incomingNumber) {
 				if(state == TelephonyManager.CALL_STATE_IDLE) {
 					mKeyguardPanelManager.showPanel();
+					if (mPrefsManager.isKeyguardShockEnable())
+						mShakeDetector.start();//FIXME需要测试
 				} else if(state == TelephonyManager.CALL_STATE_RINGING) {
 					mKeyguardPanelManager.hidePanel();
+					if (mPrefsManager.isKeyguardShockEnable())
+						mShakeDetector.stop();
 				}
 				super.onCallStateChanged(state, incomingNumber);
 			}
@@ -212,9 +216,11 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 * 
 	 *  不在锁屏都关闭：电话的时候判断状态 * 如果在锁屏界面则打开锁屏panel
 	 *  如果lisense过期，关闭Keyguard
+	 *  
+	 *  如果在锁屏界面才监听电话
 	 */
 	private void handleScreenOn() {
-		initLisense();
+//		initLisense();
 		if (!isKeyguardScreen()) {
 			if (isKeyguardServiceAlive)
 				mKeyguardPanelManager.hidePanel();
@@ -248,7 +254,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	private void handleScreenOff() {
 		if (isLauncherServiceAlive && !isTelephoneCalling()) {
 			mLaucherRefreshTimer.cancelLauncherRefreshTask();
-			mLauncherPanelManager.hidePanel();
+			hideLauncherPanel();
 		}
 
 		if (isKeyguardServiceAlive) {
@@ -317,31 +323,39 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	/*
 	 * 如果lisense过期，关闭Launcher
 	 */
-	private void showLauncherPanel() {
+	private void requestShowLauncherPanel() {
 		// 当前界面是桌面，且没有悬浮窗显示，则创建悬浮窗。postRunnable的原因是因为timerTask
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
 				if (isLauncherServiceAlive) {
-					mLauncherPanelManager.showPanel();
-					isHomeLastInterval = true;
+					showLauncherPanel();
 				}
 			}
 		});
 	}
 
 	// 灭屏幕的时候应该是cancel掉任务，present的时候应该是show那个view，ok了之后启动桌面轮询task
-	private void hideLauncherPanel() {
+	private void requestHideLauncherPanel() {
 		// 当前界面不是桌面，且有悬浮窗显示，则移除悬浮窗。
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
 				if (isLauncherServiceAlive) {
-					mLauncherPanelManager.hidePanel();
-					isHomeLastInterval = false;
+					hideLauncherPanel();
 				}
 			}
 		});
+	}
+	
+	private void showLauncherPanel() {
+		mLauncherPanelManager.showPanel();
+		isHomeLastInterval = true;
+	}
+	
+	private void hideLauncherPanel() {
+		mLauncherPanelManager.hidePanel();
+		isHomeLastInterval = false;
 	}
 
 	/*
@@ -411,6 +425,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	}
 
 	private class LauncherRefreshTimer extends Timer {
+		private Object TASK_LOCK = new Object();
 		boolean isLauncherTaskCanceledOrStoped = false;
 		long delay;
 		long period;
@@ -422,14 +437,18 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		}
 
 		void startLauncherRefreshTask() {
-			if(isLauncherServiceAlive) {
-				this.scheduleAtFixedRate(getLauncherRefreshTask(), delay, period);
-				isLauncherTaskCanceledOrStoped = false;
+			synchronized (TASK_LOCK) {
+				if(isLauncherServiceAlive) {
+					isLauncherTaskCanceledOrStoped = false;
+					this.scheduleAtFixedRate(getLauncherRefreshTask(), delay, period);
+				}
 			}
 		}
 
 		void cancelLauncherRefreshTask() {
-			isLauncherTaskCanceledOrStoped = true;
+			synchronized (TASK_LOCK) {
+				isLauncherTaskCanceledOrStoped = true;
+			}
 		}
 
 		private TimerTask getLauncherRefreshTask() {
@@ -437,15 +456,17 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 
 				@Override
 				public void run() {
-					if (isLauncherTaskCanceledOrStoped) {
-						hideLauncherPanel();
-						this.cancel();
-					} else {
-						boolean isHome = isHome();
-						if (isHome && isHomeLastInterval == false)
-							showLauncherPanel();
-						else if(isHome == false && isHomeLastInterval == true)
-							hideLauncherPanel();
+					synchronized (TASK_LOCK) {
+						if (isLauncherTaskCanceledOrStoped) {
+							requestHideLauncherPanel();
+							this.cancel();
+						} else {
+							boolean isHome = isHome();
+							if (isHome && isHomeLastInterval == false)
+								requestShowLauncherPanel();
+							else if(isHome == false && isHomeLastInterval == true)
+								requestHideLauncherPanel();
+						}
 					}
 				}
 			};

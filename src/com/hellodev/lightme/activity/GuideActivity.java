@@ -27,10 +27,11 @@ public class GuideActivity extends Activity implements OnPageChangeListener,
 		OnGuideViewClickListener {
 	private final static String TAG = "GuideActivity";
 
-	private ViewPager vpGuide;
 	private LinearLayout indexContainer;
 	private ImageView[] indexImages;
-
+	
+	private ViewPager vpGuide;
+	private GuidePagerAdapter pagerAdapter;
 	private int[] IMG_RES = new int[] { R.drawable.guide_page_1,
 			R.drawable.guide_page_2, R.drawable.guide_page_3 };//FIXME 异步加载为Drawable会快一些么
 	private final static int INDEX_IMG_SELECTED = R.drawable.guide_index_selected;
@@ -38,7 +39,6 @@ public class GuideActivity extends Activity implements OnPageChangeListener,
 
 	private MPreferenceManager prefsMgr;
 	private MDisplayHelper displayer;
-	private GuidePagerAdapter pagerAdapter;
 	
 	public final static String KEY_FLAG_FROM = "from_activity";
 	private boolean fromSetting = false;
@@ -51,7 +51,6 @@ public class GuideActivity extends Activity implements OnPageChangeListener,
 		prefsMgr = MPreferenceManager.getInstance();
 		int apkVersion = CommonDataHelper.getCurrentAppVersionCode(this);
 		int localVersion = prefsMgr.getVersionCode();
-		// int localVersion = 0;
 		if (fromSetting) {
 			setContentView(R.layout.activity_guide);
 			

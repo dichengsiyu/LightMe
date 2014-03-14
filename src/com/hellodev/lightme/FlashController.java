@@ -332,17 +332,6 @@ public class FlashController {
 		return lisenseState == MLisenseMangaer.STATE_PURCHASED;
 	}
 	
-//	public boolean checkLocalPurchaseState() {
-//		boolean purcharsed = lisenseState == MLisenseMangaer.STATE_PURCHASED;
-//		if(purcharsed == false) {
-//			int localState = MPreferenceManager.getInstance().getLocalLisenseState();
-//			if(localState == MLisenseMangaer.STATE_PURCHASED) {
-//				purcharsed = true;
-//			}
-//		}
-//		return purcharsed;
-//	}
-	
 	public void addObserver(OnFlashLevelChangedListener listener) {
 		if (observers == null)
 			observers = new ArrayList<OnFlashLevelChangedListener>();

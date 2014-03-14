@@ -54,7 +54,6 @@ public class SettingActivity extends PreferenceActivity implements
 		super.onCreate(savedInstanceState);
 		
 		flashController = FlashController.getInstance();
-		// FIXME 移动到通知栏点击事件
 		initActionBar();
 		initPreference();
 		initPreferenceWidget();
@@ -68,11 +67,7 @@ public class SettingActivity extends PreferenceActivity implements
 	@Override
 	protected void onResume() {
 		MobclickAgent.onResume(this);
-		if (mPrefsMgr.needRefreshSetting()) {
-			// 为了防止在锁屏移除panel，然后再回到设置界面
-			// FIXME 会闪烁一下，能不能局部刷新
-			refreshWhenPanelSettingChange();
-		}
+		refreshWhenPanelSettingChange();
 		refreshWhenLisenseChange(flashController.islisenseEnable());
 		super.onResume();
 	}
@@ -276,20 +271,32 @@ public class SettingActivity extends PreferenceActivity implements
 	}
 	
 	private void refreshWhenPanelSettingChange() {
-		boolean dataShowLauncher = mPrefsMgr.isLauncherPanelShown();
-		boolean uiShowLauncher = showLauncherPanel.isChecked();
-		if(dataShowLauncher != uiShowLauncher) {
-			showLauncherPanel.setOnPreferenceChangeListener(null);
-			showLauncherPanel.setChecked(uiShowLauncher);
-			showLauncherPanel.setOnPreferenceChangeListener(this);
-		}
-		
-		boolean dataShowKeyguard = mPrefsMgr.isKeyguardPanelShown();
-		boolean uiShowKeyguard = showKeyguardPanel.isChecked();
-		if(dataShowKeyguard != uiShowKeyguard) {
-			showKeyguardPanel.setOnPreferenceChangeListener(null);
-			showKeyguardPanel.setChecked(uiShowKeyguard);
-			showKeyguardPanel.setOnPreferenceChangeListener(this);
+		if (mPrefsMgr.needRefreshSetting()) {
+			// 为了防止在锁屏移除panel，然后再回到设置界面
+			// FIXME 会闪烁一下，能不能局部刷新
+			boolean dataShowLauncher = mPrefsMgr.isLauncherPanelShown();
+			boolean uiShowLauncher = showLauncherPanel.isChecked();
+			if(dataShowLauncher != uiShowLauncher) {
+				showLauncherPanel.setOnPreferenceChangeListener(null);
+				showLauncherPanel.setChecked(dataShowLauncher);
+				showLauncherPanel.setOnPreferenceChangeListener(this);
+			}
+			
+			boolean dataShowKeyguard = mPrefsMgr.isKeyguardPanelShown();
+			boolean uiShowKeyguard = showKeyguardPanel.isChecked();
+			if(dataShowKeyguard != uiShowKeyguard) {
+				showKeyguardPanel.setOnPreferenceChangeListener(null);
+				showKeyguardPanel.setChecked(dataShowKeyguard);
+				showKeyguardPanel.setOnPreferenceChangeListener(this);
+
+				if(dataShowKeyguard == false && enableKeyguardShock.isChecked()) {
+					enableKeyguardShock.setOnPreferenceChangeListener(null);
+					enableKeyguardShock.setChecked(false);
+					enableKeyguardShock.setOnPreferenceChangeListener(this);
+				}
+			}
+			
+			mPrefsMgr.setNeedRefreshSetting(false);
 		}
 	}
 	

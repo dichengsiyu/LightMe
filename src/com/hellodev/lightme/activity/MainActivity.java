@@ -66,20 +66,12 @@ public class MainActivity extends Activity implements
 		MobclickAgent.setDebugMode(false);
 	}
 	
-	private void initLisense() {
-		boolean purchased = flashController.isPurchased();
-		if(!purchased) {
-			lisenseManager = new MLisenseMangaer(this);
-			lisenseManager.bindRemoteService();
-		}
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
 		flashController.addObserver(this);
 		
-		initLisense();
+//		initLisense();
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}
@@ -89,7 +81,6 @@ public class MainActivity extends Activity implements
 		super.onPause();
 		flashController.removeObserver(this);
 		MobclickAgent.onPause(this);
-
 		closeGuideView();
 	}
 
@@ -128,6 +119,7 @@ public class MainActivity extends Activity implements
 	@Override
 	public void onSwitchClick() {
 		flashView.setFlashLevel(flashController.toggleFlash());
+		closeGuideView();
 	}
 
 	@Override
@@ -157,7 +149,7 @@ public class MainActivity extends Activity implements
 			break;
 		}
 	}
-
+	
 	private void initView() {
 		flashView = (FlashView) findViewById(R.id.btn_toggle);
 		flashView.setOnSwitchStateChangeListener(this);
@@ -189,7 +181,6 @@ public class MainActivity extends Activity implements
 			mLockDialog.cancel();
 	}
 
-	// 展示应该都是按步骤的
 	private void showGuideView() {
 		firstSetup = prefsMgr.getFirtStartDate() == 0;
 		if (firstSetup) {
@@ -202,7 +193,7 @@ public class MainActivity extends Activity implements
 			int flashViewGuideY = displayHelper.dpiToPx(100);
 			
 			TextView guideView = new TextView(this);
-			guideView.setTextSize(displayHelper.dpiToPx(13));
+			guideView.setTextSize(displayHelper.dpiToPx(11));
 			guideView.setText(R.string.guide_main);
 			guideView.setTextColor(Color.WHITE);
 			guideViewMgr.add(guideView, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM,
@@ -216,6 +207,14 @@ public class MainActivity extends Activity implements
 		if (guideViewMgr != null) {
 			guideViewMgr.close();
 			guideViewMgr = null;
+		}
+	}
+	
+	private void initLisense() {
+		boolean purchased = flashController.isPurchased();
+		if(!purchased) {
+			lisenseManager = new MLisenseMangaer(this);
+			lisenseManager.bindRemoteService();
 		}
 	}
 

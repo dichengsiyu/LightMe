@@ -61,7 +61,7 @@ public class FlashView extends View {
 	private int FACE_STROKE_SIZE_Y;
 
 	private int FLASH_BITMAP_OFFSET;
-	private Bitmap flashOffBitmap, flashOnBitmap, tearBitmap;
+	private Bitmap flashOffBitmap, flashOnBitmap;
 
 	private final static float FLASH_ON_COLOR_H;
 	private final static float FLASH_ON_COLOR_S;
@@ -136,8 +136,6 @@ public class FlashView extends View {
 		flashOnBitmap = BitmapFactory.decodeResource(getResources(),
 				R.drawable.flash_on);
 		
-		tearBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lip);
-
 		mFlashPaint = new Paint();
 		mFlashPaint.setAntiAlias(true);
 		mFlashPaint.setColor(Color.YELLOW);

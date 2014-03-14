@@ -3,17 +3,13 @@ package com.hellodev.lightme.view;
 import com.hellodev.lightme.FlashController;
 import com.hellodev.lightme.R;
 import com.hellodev.lightme.service.ServiceHelper;
-import com.hellodev.lightme.util.MDisplayHelper;
 import com.hellodev.lightme.util.MPreferenceManager;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnTouchListener;
-import android.widget.ImageView;
 
 public class LauncherPanelManager extends BasePanelManager implements
 		OnTouchListener {
@@ -40,7 +36,6 @@ public class LauncherPanelManager extends BasePanelManager implements
 
 	@Override
 	public void showPanel() {
-		Log.v(TAG, "showPanel at time: " + System.currentTimeMillis());
 		if (!isPanelShown) {
 			if (mLastX == -1 || mLastY == -1) {
 				mLastX = 0;
@@ -58,7 +53,6 @@ public class LauncherPanelManager extends BasePanelManager implements
 	 */
 	@Override
 	public void hidePanel() {
-		Log.v(TAG, "hidePanel at time: " + System.currentTimeMillis());
 		if (isPanelShown) {
 			removeWindow();
 			PANEL_VIEW_NORMAL_MOVE_Y_MAX = SCREEN_HEIGHT
@@ -159,29 +153,5 @@ public class LauncherPanelManager extends BasePanelManager implements
 	@Override
 	protected int getPanelLayoutGravity() {
 		return Gravity.LEFT | Gravity.TOP;
-	}
-
-	// 展示应该都是按步骤的
-	private void showGuideView() {
-		if (!isFirstSetup) {
-			isFirstSetup = MPreferenceManager.getInstance()
-					.getFirstShowLauncherDate() == 0;
-			if (isFirstSetup) {
-				MPreferenceManager.getInstance().setFirstShowLauncherDate();
-				isFirstSetup = false;
-				guideViewMgr = new GuideViewManager(wm,
-						WindowManager.LayoutParams.TYPE_PHONE);
-				int flashViewGuideRes = R.drawable.ic_launcher;
-				MDisplayHelper displayHelper = new MDisplayHelper();
-				int flashViewGuideX = mPanelParams.x
-						+ displayHelper.dpiToPx(10);
-				int flashViewGuideY = mPanelParams.y
-						+ displayHelper.dpiToPx(10);
-				ImageView guideView = new ImageView(mContext);
-				guideView.setImageResource(flashViewGuideRes);
-				guideViewMgr.add(guideView, getPanelLayoutGravity(),
-						flashViewGuideX, flashViewGuideY, true);
-			}
-		}
 	}
 }

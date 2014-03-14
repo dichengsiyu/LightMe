@@ -1,19 +1,15 @@
 package com.hellodev.lightme.view;
 
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.TextView;
 
 import com.hellodev.lightme.FlashController;
 import com.hellodev.lightme.R;
 import com.hellodev.lightme.service.ServiceHelper;
-import com.hellodev.lightme.util.MDisplayHelper;
 import com.hellodev.lightme.util.MPreferenceManager;
 
 public class KeyguardPanelManager extends BasePanelManager implements
@@ -33,7 +29,7 @@ public class KeyguardPanelManager extends BasePanelManager implements
 				R.drawable.keyguard_off);
 		PANEL_VIEW_WIDTH = panelDrawable.getIntrinsicWidth();
 		PANEL_VIEW_HEIGHT = panelDrawable.getIntrinsicHeight();
-		PANEL_VIEW_DOCK_OFFSET_Y = mDisplayHelper.dpiToPx(130);
+		PANEL_VIEW_DOCK_OFFSET_Y = mDisplayHelper.dpiToPx(160);
 		PANEL_VIEW_DOCK_X = (SCREEN_WIDTH - PANEL_VIEW_WIDTH) / 2;
 		PANEL_VIEW_DOCK_Y = SCREEN_HEIGHT - PANEL_VIEW_DOCK_OFFSET_Y;
 
@@ -47,7 +43,6 @@ public class KeyguardPanelManager extends BasePanelManager implements
 
 	@Override
 	public void showPanel() {
-		Log.v(TAG, "showPanel() isPanelShown:" + isPanelShown);
 		if (!isPanelShown) {
 			setWindowPosition(PANEL_VIEW_DOCK_X, PANEL_VIEW_DOCK_Y);
 			flashController.addObserver(this);
@@ -58,14 +53,10 @@ public class KeyguardPanelManager extends BasePanelManager implements
 	// 发生在进入桌面时，屏幕关闭应该是要show出来，on的时候应该是shake的重新绑定，on的时候还需要做什么么，把power守护关掉
 	@Override
 	public void hidePanel() {
-		Log.v(TAG, "closePanel() isPanelShown:" + isPanelShown);
 		if (isPanelShown) {
 			removeWindow();
 			closeClearPanel();
 			flashController.removeObserver(this);
-
-			// 关闭引导页
-//			closeGuideView();
 		}
 	}
 
@@ -79,7 +70,6 @@ public class KeyguardPanelManager extends BasePanelManager implements
 				mPanelView.setBackgroundResource(R.drawable.keyguard_on);
 		}
 		
-//		closeGuideView();
 	}
 
 	@Override
@@ -145,29 +135,5 @@ public class KeyguardPanelManager extends BasePanelManager implements
 	@Override
 	protected int getPanelLayoutGravity() {
 		return Gravity.LEFT | Gravity.TOP;
-	}
-
-	// 展示应该都是按步骤的
-	private void showGuideView() {
-		if (!isFirstSetup) {
-			isFirstSetup = MPreferenceManager.getInstance()
-					.getFirstShowKeyguardDate() == 0;
-			if (isFirstSetup) {
-				MPreferenceManager.getInstance().setFirstShowKeyguardDate();
-				isFirstSetup = false;
-				guideViewMgr = new GuideViewManager(wm,
-						WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
-				MDisplayHelper displayHelper = new MDisplayHelper();
-				int flashViewGuideY = mPanelParams.y - displayHelper.dpiToPx(30);
-				
-				TextView guideView = new TextView(mContext);
-				guideView.setTextSize(displayHelper.dpiToPx(13));
-				guideView.setText(R.string.guide_main);
-				guideView.setTextColor(Color.WHITE);
-				
-				guideViewMgr.add(guideView, getPanelLayoutGravity(),
-						0, flashViewGuideY,true);
-			}
-		}
 	}
 }

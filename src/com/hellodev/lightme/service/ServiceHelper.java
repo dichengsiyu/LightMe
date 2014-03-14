@@ -1,7 +1,6 @@
 package com.hellodev.lightme.service;
 
 import com.hellodev.lightme.FlashApp;
-import com.hellodev.lightme.util.MLisenseMangaer;
 import com.hellodev.lightme.util.MPreferenceManager;
 
 import android.content.Intent;

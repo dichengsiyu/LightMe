@@ -53,7 +53,6 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 	protected FlashController flashController;
 	
 	protected GuideViewManager guideViewMgr;
-	protected boolean isFirstSetup;
 	
 	protected BasePanelManager() {
 		mContext = FlashApp.getContext();
