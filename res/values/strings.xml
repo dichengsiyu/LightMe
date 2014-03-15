@@ -8,7 +8,7 @@
     
     <string name="clear_panel">清除</string>
     
-    <string name="guide_main">小伙伴，你好</string>
+    <string name="guide_main">小伙伴，点亮滑一滑？</string>
     <string name="guide_keyguard">正经的摇一次？</string>
     
     <string name="alert_auto_close_title">让闪光灯休息一下吧</string>
@@ -33,8 +33,8 @@
     <string name="setting_flash_auto_close">自动关灯</string>
     <string name="setting_flash_auto_close_time">自动关灯时间</string>
     <string name="setting_control">操作设置</string>
-    <string name="setting_control_show_launcher_panel">显示桌面悬浮开关</string>
-    <string name="setting_control_show_keyguard_panel">显示锁屏开关</string>
+    <string name="setting_control_show_launcher_panel">显示桌面悬浮插件</string>
+    <string name="setting_control_show_keyguard_panel">显示锁屏插件</string>
     <string name="setting_control_enable_keyguard_shock">开启锁屏摇动</string>
     <string name="setting_control_enable_switch_sound">开关声音</string>
     <string name="more">更多</string>
@@ -58,13 +58,13 @@
    	<string name="lock_subject">LightMe锁住了</string>
     <string name="lock_content_default">我的LightMe锁住了，因为%1$s</string>
     
-    <string name="notification_laucher_panel_open_title">桌面浮动开关</string>
-    <string name="notification_laucher_panel_open_content">开关仅在桌面显示，长按有惊喜</string>
-    <string name="notification_laucher_panel_open_ticker">桌面浮开关已打开</string>
+    <string name="notification_laucher_panel_open_title">桌面悬浮插件插件</string>
+    <string name="notification_laucher_panel_open_content">插件仅在桌面显示，长按有惊喜</string>
+    <string name="notification_laucher_panel_open_ticker">桌面悬浮插件已打开</string>
     
-    <string name="notification_keyguard_panel_open_title">锁屏开关</string>
-    <string name="notification_keyguard_panel_open_content">开关仅在锁屏界面显示，长按有惊喜</string>
-    <string name="notification_keyguard_panel_open_ticker">锁屏开关已打开</string>
+    <string name="notification_keyguard_panel_open_title">锁屏插件</string>
+    <string name="notification_keyguard_panel_open_content">插件仅在锁屏界面显示，长按有惊喜</string>
+    <string name="notification_keyguard_panel_open_ticker">锁屏插件已打开</string>
     
     <string name="notification_keyguard_shock_enable_title">锁屏摇动</string>
     <string name="notification_keyguard_shock_enable_content">开屏大胆摇，灭屏放心走</string>
