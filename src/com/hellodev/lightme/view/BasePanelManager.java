@@ -140,7 +140,6 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 	}
 
 	protected void onLongPressStateEnd() {
-		mPanelView.setAlpha(1);
 		mPanelParams.width = PANEL_VIEW_WIDTH;
 		mPanelParams.height = PANEL_VIEW_HEIGHT;
 		wm.updateViewLayout(mPanelView, mPanelParams);

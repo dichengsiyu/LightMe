@@ -1,11 +1,14 @@
 package com.hellodev.lightme.view;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.hellodev.lightme.FlashController;
 import com.hellodev.lightme.R;
@@ -19,9 +22,11 @@ public class KeyguardPanelManager extends BasePanelManager implements
 	private int PANEL_VIEW_DOCK_OFFSET_Y;
 	private final int PANEL_VIEW_DOCK_X;
 	private final int PANEL_VIEW_DOCK_Y;
+	private Animation hintAnimation;
 
 	public KeyguardPanelManager() {
 		super();
+		mPanelView = new KeyguardPanelView(mContext);
 		mPanelView.setOnTouchListener(this);
 		mPanelView.setBackgroundResource(R.drawable.keyguard_off);
 
@@ -48,6 +53,13 @@ public class KeyguardPanelManager extends BasePanelManager implements
 			flashController.addObserver(this);
 		}
 		setFlashLevel(flashController.getCurrentLevel());
+	}
+	
+	//FIXME 需要判断动画是否已经执行完毕
+	public void showHint() {
+		if(hintAnimation == null)
+			hintAnimation = AnimationUtils.loadAnimation(mContext, R.anim.keyguard_shock_hint);
+		mPanelView.startAnimation(hintAnimation);
 	}
 
 	// 发生在进入桌面时，屏幕关闭应该是要show出来，on的时候应该是shake的重新绑定，on的时候还需要做什么么，把power守护关掉
@@ -109,7 +121,6 @@ public class KeyguardPanelManager extends BasePanelManager implements
 				} else {
 					dock();
 				}
-
 				onLongPressStateEnd();
 			}
 			break;

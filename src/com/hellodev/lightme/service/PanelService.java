@@ -175,9 +175,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			filter.addAction(Intent.ACTION_USER_PRESENT);
 			mSystemReceiver = new SystemReceiver();
 			FlashApp.getContext().registerReceiver(mSystemReceiver, filter);
-			
-			//foreground
-			startForeground(1, new Notification());
 		}
 
 		if (ACTION_LAUNCHER.equals(action))
@@ -211,7 +208,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				FlashApp.getContext().unregisterReceiver(mSystemReceiver);
 			mSystemReceiver = null;
 			
-			stopForeground(true);
 			stopSelf();
 		}
 	}
@@ -235,6 +231,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 					mKeyguardPanelManager.hidePanel();
 				} else {
 					mKeyguardPanelManager.showPanel();//灭屏、亮屏都show
+					mKeyguardPanelManager.showHint();
 					if (mPrefsManager.isKeyguardShockEnable()) {
 						mShakeDetector.start();
 					}
@@ -313,6 +310,9 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				// 如果覆盖安装了，这个时候启动LauncherPanel不应该开始轮询，而应该等到user_present的时候
 				startLauncherRefreshTask(0, 1000);
 			}
+			
+			//foreground
+			startForeground(1, new Notification());
 		}
 	}
 
@@ -323,7 +323,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			// closePanel
 			mLauncherPanelManager.closePanel();
 			mLauncherPanelManager = null;
+			
 			// stopService
+			//FIXME 这样会导致只打开锁屏的时候会有一段时间关闭锁屏开关
+			stopForeground(true);
 		}
 	}
 

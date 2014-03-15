@@ -55,6 +55,10 @@ public class FlashView extends View {
 
 	private int MOUTH_Y_MIN;
 	private int MOUTH_Y_INTERVAL;
+	
+	//Mouth off
+	private int MOUTH_OFF_SIZE_X;
+	private int MOUTH_OFF_SIZE_Y;
 
 	private final static float FACE_STROKE_SIZE_INTERVAL = 0.05f;
 	private int FACE_STROKE_SIZE_X;
@@ -72,7 +76,7 @@ public class FlashView extends View {
 		FLASH_ON_COLOR_S = hsv[1];
 	};
 	private final static float FLASH_ON_COLOR_V_MAX = 1;
-	private final static float FLASH_ON_COLOR_V_INTERVAL = 0.05f;// light
+	private final static float FLASH_ON_COLOR_V_INTERVAL = 0.1f;// light
 	private final static int FLASH_OFF_COLOR = 0x161616;
 
 	private float[] mCurrentColorHSV;
@@ -119,11 +123,14 @@ public class FlashView extends View {
 		// Mouth
 		MOUTH_SIZE_X_MAX = displayHelper.dpiToPx(36);
 		MOUTH_SIZE_X_INTERVAL = displayHelper.dpiToPx(6);
-		MOUTH_SIZE_Y_MAX = displayHelper.dpiToPx(12);
+		MOUTH_SIZE_Y_MAX = displayHelper.dpiToPx(14);
 		MOUTH_SIZE_Y_INTERVAL = displayHelper.dpiToPx(1);
 
 		MOUTH_Y_MIN = displayHelper.dpiToPx(220);
 		MOUTH_Y_INTERVAL = displayHelper.dpiToPx(4);
+		
+		MOUTH_OFF_SIZE_X = displayHelper.dpiToPx(12);
+		MOUTH_OFF_SIZE_Y = displayHelper.dpiToPx(8);
 
 		// Stroke
 		FACE_STROKE_SIZE_X = displayHelper.dpiToPx(11);
@@ -274,6 +281,7 @@ public class FlashView extends View {
 		// draw Flash light
 		mFlashPaint.setStyle(Paint.Style.FILL);
 		mFlashPaint.setColor(Color.HSVToColor(mCurrentColorHSV));
+		
 		mFlashPath.reset();
 		mFlashPath.moveTo(flashStartXLeft, FLASH_START_Y);
 		mFlashPath.lineTo(flashStartXRight, FLASH_START_Y);
@@ -328,14 +336,15 @@ public class FlashView extends View {
 			canvas.drawLine(rightEyeStartX + eyeBallOffset, eyeStartY - strokeSizeX
 					/ 2, rightEyeStartX + eyeBallOffset, eyeStartY + eyeSizeY,
 					mFlashPaint);
-			if(isFlashOn)
-			canvas.drawLine(mouthStartX + mouthSizeX,
-					mouthStartY + strokeSizeX / 2, mouthStartX + mouthSizeX,
-					mouthStartY - mouthSizeY, mFlashPaint);
+			if(isFlashOn) {
+				canvas.drawLine(mouthStartX + mouthSizeX,
+						mouthStartY + strokeSizeX / 2, mouthStartX + mouthSizeX,
+						mouthStartY - mouthSizeY, mFlashPaint);
+			}
 			else {
-				float mouthLeftX = centerX - 18;
-				float mouthRightX = centerX + 18;
-				float mouthEndY = mouthStartY + 25;
+				float mouthLeftX = centerX - MOUTH_OFF_SIZE_X/2;
+				float mouthRightX = centerX + MOUTH_OFF_SIZE_X/2;
+				float mouthEndY = mouthStartY + MOUTH_OFF_SIZE_Y;
 				mFlashPath.reset();
 				mFlashPaint.setStyle(Paint.Style.STROKE);   
 				mFlashPath.moveTo(mouthLeftX, mouthStartY);
