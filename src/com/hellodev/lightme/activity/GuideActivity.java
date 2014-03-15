@@ -20,8 +20,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.LinearLayout.LayoutParams;
 
 public class GuideActivity extends Activity implements OnPageChangeListener,
 		OnGuideViewClickListener {
@@ -82,18 +80,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener,
 	//FIXME 宽高都应该写到xml中，然后可以直接getResource获取得到像素
 	private void initView() {
 		displayer = new MDisplayHelper();
-		RelativeLayout root = (RelativeLayout) findViewById(R.id.root);
-
-		int indexMarginBottom = fromSetting ? displayer.dpiToPx(60) : displayer
-				.dpiToPx(16);
-		indexContainer = new LinearLayout(this);
-		indexContainer.setGravity(Gravity.CENTER);
-		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		params.setMargins(0, 0, 0, indexMarginBottom);
-		indexContainer.setLayoutParams(params);
-		root.addView(indexContainer);
+		indexContainer = (LinearLayout) findViewById(R.id.index_container);
 
 		indexImages = new ImageView[IMG_RES.length + 1];
 		LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
@@ -171,7 +158,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener,
 
 	@Override
 	public void onGuideViewClick(View view) {
-		if (view.getId() == R.id.btn_lightme) {
+		if (view.getId() == R.id.btn_start) {
 			startMainActivity();
 			prefsMgr.setVersionCode(CommonDataHelper
 					.getCurrentAppVersionCode(this));

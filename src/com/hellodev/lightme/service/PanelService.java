@@ -9,6 +9,7 @@ import com.hellodev.lightme.FlashApp;
 import com.hellodev.lightme.FlashController;
 import com.hellodev.lightme.receiver.SystemReceiver;
 import com.hellodev.lightme.util.MLisenseMangaer;
+import com.hellodev.lightme.util.MNotificationHelper;
 import com.hellodev.lightme.util.MPreferenceManager;
 import com.hellodev.lightme.util.ShakeDetector;
 import com.hellodev.lightme.util.MLisenseMangaer.OnLisenseStateChangeListener;
@@ -495,6 +496,8 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		if(flashController.islisenseEnable() == false) {
 			stopKeyguardPanel();
 			stopLauncherPanel();
+			MNotificationHelper notify = new MNotificationHelper();
+			notify.notifyPanelCloseWhenLock();
 		}
 	}
 

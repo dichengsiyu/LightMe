@@ -76,7 +76,7 @@ public class FlashView extends View {
 		FLASH_ON_COLOR_S = hsv[1];
 	};
 	private final static float FLASH_ON_COLOR_V_MAX = 1;
-	private final static float FLASH_ON_COLOR_V_INTERVAL = 0.1f;// light
+	private final static float FLASH_ON_COLOR_V_INTERVAL = 0.08f;// light
 	private final static int FLASH_OFF_COLOR = 0x161616;
 
 	private float[] mCurrentColorHSV;

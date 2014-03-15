@@ -21,6 +21,7 @@ public class LauncherPanelManager extends BasePanelManager implements
 
 	public LauncherPanelManager() {
 		super();
+		mPanelView = new View(mContext);
 		mPanelView.setOnTouchListener(this);
 		mPanelView.setBackgroundResource(R.drawable.launcher_off);
 

@@ -68,13 +68,14 @@ public class GuidePagerAdapter extends PagerAdapter implements OnClickListener {
 		} else {
 			View lastView = LayoutInflater.from(appContext).inflate(
 					R.layout.pager_view, null);
-			Button btnLightme = (Button) lastView
-					.findViewById(R.id.btn_lightme);
+			Button btnStart = (Button) lastView
+					.findViewById(R.id.btn_start);
 
-			if (fromSettingFlag)
-				btnLightme.setBackgroundResource(R.drawable.lightme);
-			else
-				btnLightme.setOnClickListener(this);
+			if (fromSettingFlag) {
+				btnStart.setVisibility(View.GONE);
+			} else {
+				btnStart.setOnClickListener(this);
+			}
 			view = lastView;
 		}
 

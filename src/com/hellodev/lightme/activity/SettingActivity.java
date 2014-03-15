@@ -4,6 +4,7 @@ import com.hellodev.lightme.FlashController;
 import com.hellodev.lightme.R;
 import com.hellodev.lightme.service.ServiceHelper;
 import com.hellodev.lightme.util.CommonDataHelper;
+import com.hellodev.lightme.util.LightmeConstants;
 import com.hellodev.lightme.util.MConnectHelper;
 import com.hellodev.lightme.util.MNotificationHelper;
 import com.hellodev.lightme.util.MPreferenceManager;
@@ -192,9 +193,7 @@ public class SettingActivity extends PreferenceActivity implements
 			Intent intent = new Intent(this, AboutActivity.class);
 			startActivity(intent);
 		} else if (preference == market) {
-			Intent intent = new Intent(this, GuideActivity.class);
-			intent.putExtra(GuideActivity.KEY_FLAG_FROM, SettingActivity.class.getName());
-			startActivity(intent);
+			connectHelper.jumpToMarket(LightmeConstants.APP_IDENTIFY);
 		} else if (preference == version) {
 			Intent intent = new Intent(this, GuideActivity.class);
 			intent.putExtra(GuideActivity.KEY_FLAG_FROM, SettingActivity.class.getName());

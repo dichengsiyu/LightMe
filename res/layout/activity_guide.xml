@@ -8,5 +8,12 @@
         android:id="@+id/vp_guide"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
+    
+    <LinearLayout
+        android:id="@+id/index_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dip"
+        android:gravity="center"/>
 </RelativeLayout>

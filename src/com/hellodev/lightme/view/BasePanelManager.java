@@ -67,7 +67,6 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 		SCREEN_WIDTH = wm.getDefaultDisplay().getWidth();
 		SCREEN_HEIGHT = wm.getDefaultDisplay().getHeight() - STATUS_BAR_HEIGHT;
 
-		mPanelView = new View(mContext);
 		mPanelParams = new WindowManager.LayoutParams();
 		mPanelParams.type = WindowManager.LayoutParams.TYPE_PHONE;
 		mPanelParams.format = PixelFormat.RGBA_8888;

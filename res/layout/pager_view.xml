@@ -4,12 +4,18 @@
     android:layout_height="match_parent"
     android:background="@drawable/guide_page_4" >
 
-    <Button
-        android:id="@+id/btn_lightme"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="150dip"
-        android:background="@drawable/guide_btn_lightme" />
+        android:layout_marginTop="460dip"
+        android:background="@drawable/lightme"
+        android:contentDescription="@string/app_name" />
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="560dip"
+        android:background="@drawable/guide_btn_beigin"/>
 </RelativeLayout>

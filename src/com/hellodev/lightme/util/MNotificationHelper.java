@@ -31,17 +31,17 @@ public class MNotificationHelper {
 		String ticker = null;
 		switch(notifyType) {
 			case NOTIFICATION_TYPE_LAUCHER_PANEL:
-				title = resource.getString(R.string.notification_laucher_panel_open_title);
-				content = resource.getString(R.string.notification_laucher_panel_open_content);
-				ticker = resource.getString(R.string.notification_laucher_panel_open_ticker);
+				title = resource.getString(R.string.launcher_panel);
+				content = resource.getString(R.string.notification_launcher_panel_open_content);
+				ticker = resource.getString(R.string.notification_keyguard_shock_enable_ticker);
 				break;
 			case NOTIFICATION_TYPE_KEYGUARD_PANEL:
-				title = resource.getString(R.string.notification_keyguard_panel_open_title);
+				title = resource.getString(R.string.keyguard_panel);
 				content = resource.getString(R.string.notification_keyguard_panel_open_content);
 				ticker = resource.getString(R.string.notification_keyguard_panel_open_ticker);
 				break;	
 			case NOTIFICATION_TYPE_KEYGUARD_SHOCK:
-				title = resource.getString(R.string.notification_keyguard_shock_enable_title);
+				title = resource.getString(R.string.keyguard_shock);
 				content = resource.getString(R.string.notification_keyguard_shock_enable_content);
 				ticker = resource.getString(R.string.notification_keyguard_shock_enable_ticker);
 				break;
@@ -57,16 +57,16 @@ public class MNotificationHelper {
 		mManager.notify(0, builder.build());
 	}
 	
-	public void notifyLisenseError() {
+	public void notifyPanelCloseWhenLock() {
 		Context context = FlashApp.getContext();
 		Resources resource = context.getResources();
-		String title = resource.getString(R.string.notification_lisense_error_title);
-		String content = resource.getString(R.string.notification_lisense_error_content);
-		String ticker = resource.getString(R.string.notification_lisense_error_ticker);
+		String title = resource.getString(R.string.notification_panel_close_when_lock_title);
+		String content = resource.getString(R.string.notification_panel_close_when_lock_content);
+		String ticker = resource.getString(R.string.notification_panel_close_when_lock_ticker);
 		
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
 				FlashApp.getContext()).setContentTitle(title)
-				.setSmallIcon(R.drawable.ic_logo)
+				.setSmallIcon(R.drawable.ic_logo_locked)
 				.setContentText(content).setTicker(ticker).setAutoCancel(true);
 		
 		Intent intent = new Intent(context, SettingActivity.class);

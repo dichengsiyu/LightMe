@@ -58,21 +58,21 @@
    	<string name="lock_subject">LightMe锁住了</string>
     <string name="lock_content_default">我的LightMe锁住了，因为%1$s</string>
     
-    <string name="notification_laucher_panel_open_title">桌面悬浮插件插件</string>
-    <string name="notification_laucher_panel_open_content">插件仅在桌面显示，长按有惊喜</string>
-    <string name="notification_laucher_panel_open_ticker">桌面悬浮插件已打开</string>
+    <string name="launcher_panel">桌面悬浮插件插件</string>
+    <string name="notification_launcher_panel_open_content">插件仅在桌面显示，长按有惊喜</string>
+    <string name="notification_launcher_panel_open_ticker">桌面悬浮插件已打开</string>
     
-    <string name="notification_keyguard_panel_open_title">锁屏插件</string>
+    <string name="keyguard_panel">锁屏插件</string>
     <string name="notification_keyguard_panel_open_content">插件仅在锁屏界面显示，长按有惊喜</string>
     <string name="notification_keyguard_panel_open_ticker">锁屏插件已打开</string>
     
-    <string name="notification_keyguard_shock_enable_title">锁屏摇动</string>
+    <string name="keyguard_shock">锁屏摇动</string>
     <string name="notification_keyguard_shock_enable_content">开屏大胆摇，灭屏放心走</string>
     <string name="notification_keyguard_shock_enable_ticker">锁屏摇动已开启</string>
     
-    <string name="notification_lisense_error_title">小伙伴的LightMe锁住了</string>
-    <string name="notification_lisense_error_content">如有疑问请第一时间联系我们</string>
-    <string name="notification_lisense_error_ticker">LightMe锁住了</string>
+	<string name="notification_panel_close_when_lock_title">LightMe插件已关闭</string>
+    <string name="notification_panel_close_when_lock_content">LightMe锁住了，点击进入设置</string>
+    <string name="notification_panel_close_when_lock_ticker">LightMe插件已关闭</string>
     
     <string name="lisense_state_trying">^_^ 试用ing</string>
     <string name="lisense_state_expired">试用过期了 T.T</string>
