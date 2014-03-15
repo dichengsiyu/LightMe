@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -195,11 +196,12 @@ public class MainActivity extends Activity implements
 			TextView guideView = new TextView(this);
 			guideView.setTextSize(displayHelper.dpiToPx(11));
 			guideView.setText(R.string.guide_main);
+			guideView.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
 			guideView.setTextColor(Color.WHITE);
 			guideViewMgr.add(guideView, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM,
 					0, flashViewGuideY, true);
 			
-			flashView.setFlashLevel(flashController.toggleFlash());
+//			flashView.setFlashLevel(flashController.toggleFlash());
 		}
 	}
 

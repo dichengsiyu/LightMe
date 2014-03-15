@@ -272,6 +272,7 @@ public class FlashView extends View {
 					+ FLASH_BITMAP_OFFSET, mFlashPaint);
 
 		// draw Flash light
+		mFlashPaint.setStyle(Paint.Style.FILL);
 		mFlashPaint.setColor(Color.HSVToColor(mCurrentColorHSV));
 		mFlashPath.reset();
 		mFlashPath.moveTo(flashStartXLeft, FLASH_START_Y);
@@ -315,8 +316,10 @@ public class FlashView extends View {
 					eyeStartY, mFlashPaint);
 			canvas.drawLine(rightEyeStartX, eyeStartY, rightEyeStartX + eyeSizeX,
 					eyeStartY, mFlashPaint);
-			canvas.drawLine(mouthStartX, mouthStartY, mouthStartX + mouthSizeX,
-					mouthStartY, mFlashPaint);
+			if(isFlashOn){
+				canvas.drawLine(mouthStartX, mouthStartY, mouthStartX + mouthSizeX,
+						mouthStartY, mFlashPaint);
+			}
 
 			mFlashPaint.setStrokeWidth(strokeSizeY);
 			canvas.drawLine(leftEyeStartX + eyeBallOffset, eyeStartY - strokeSizeX
@@ -325,9 +328,21 @@ public class FlashView extends View {
 			canvas.drawLine(rightEyeStartX + eyeBallOffset, eyeStartY - strokeSizeX
 					/ 2, rightEyeStartX + eyeBallOffset, eyeStartY + eyeSizeY,
 					mFlashPaint);
+			if(isFlashOn)
 			canvas.drawLine(mouthStartX + mouthSizeX,
 					mouthStartY + strokeSizeX / 2, mouthStartX + mouthSizeX,
 					mouthStartY - mouthSizeY, mFlashPaint);
+			else {
+				float mouthLeftX = centerX - 18;
+				float mouthRightX = centerX + 18;
+				float mouthEndY = mouthStartY + 25;
+				mFlashPath.reset();
+				mFlashPaint.setStyle(Paint.Style.STROKE);   
+				mFlashPath.moveTo(mouthLeftX, mouthStartY);
+				mFlashPath.lineTo(centerX, mouthEndY);
+				mFlashPath.lineTo(mouthRightX, mouthStartY);
+				canvas.drawPath(mFlashPath, mFlashPaint);
+			}
 		} else {
 			// draw Eye
 			mFlashPaint.setColor(Color.BLACK);
