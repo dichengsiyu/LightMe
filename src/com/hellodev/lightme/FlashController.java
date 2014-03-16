@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hellodev.lightme.service.ServiceHelper;
 import com.hellodev.lightme.util.MLisenseMangaer;
@@ -305,6 +306,7 @@ public class FlashController {
 		if (this.lisenseState != lisenseState) {
 			this.lisenseState = lisenseState;
 
+			Toast.makeText(FlashApp.getContext(), "setLisenseState state:"+lisenseState, Toast.LENGTH_LONG).show();
 			lisenseEnable = lisenseState == MLisenseMangaer.STATE_PURCHASED
 					|| lisenseState == MLisenseMangaer.STATE_TRYING;
 			

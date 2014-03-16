@@ -222,7 +222,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 *  如果在锁屏界面才监听电话
 	 */
 	private void handleScreenOn() {
-//		initLisense();
+		initLisense();
 		if (!isKeyguardScreen()) {
 			if (isKeyguardServiceAlive)
 				mKeyguardPanelManager.hidePanel();
