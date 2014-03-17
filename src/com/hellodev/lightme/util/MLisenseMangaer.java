@@ -90,6 +90,7 @@ public class MLisenseMangaer {
 		int lisenseState = STATE_UNKNOWN;
 		try {
 			// 调用服务接口进行验证,获取返回的结果值
+			//FIXME 为什么有的时候为空
 			result = mLicensingService.checkLicense(packageName);
 		} catch (RemoteException e) {
 			Log.e(TAG, "获取证书失败");

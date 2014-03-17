@@ -39,7 +39,7 @@
             android:launchMode="singleTask"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/CustomSmartBarTheme" >
+            android:theme="@style/GuideSmartBarTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

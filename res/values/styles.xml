@@ -10,6 +10,16 @@
         <item name="android:actionOverflowButtonStyle">@style/ActionbarOverFlowStyle</item>
     </style>
 
+    <style name="GuideSmartBarTheme" parent="@android:style/Theme.DeviceDefault.Light">
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
+    </style>
+
+    <style name="GuideActionBar" parent="@android:style/Widget.DeviceDefault.ActionBar">
+        <item name="android:background">@color/guide_action_bar</item>
+        <item name="android:backgroundSplit">@drawable/action_bar_bg</item>
+        <item name="android:actionOverflowButtonStyle">@style/ActionbarOverFlowStyle</item>
+    </style>
+
     <style name="ActionbarOverFlowStyle" parent="@android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@drawable/button_back</item>
     </style>

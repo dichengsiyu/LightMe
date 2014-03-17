@@ -238,7 +238,6 @@ public class MainActivity extends Activity implements
 		if(this.isLisenseEnable != isLisenseEnable) {
 			//之后就直接setFlashLevel就好
 			flashView.setLisenseState(flashController.islisenseEnable(), flashController.getCurrentLevel());
-			
 			if(isLisenseEnable) {
 				btnLock.setVisibility(View.GONE);
 			} else {
