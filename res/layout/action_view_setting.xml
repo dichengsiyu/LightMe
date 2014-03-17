@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:contentDescription="@string/lock_subject"
-        android:src="@drawable/action_btn_feedback" />
+        android:src="@drawable/selector_btn_lock_small" />
 
     <ImageButton
         android:id="@+id/action_feedback"

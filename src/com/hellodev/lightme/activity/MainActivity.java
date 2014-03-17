@@ -16,7 +16,6 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hellodev.lightme.FlashController;
 import com.hellodev.lightme.FlashController.OnFlashLevelChangedListener;
@@ -237,12 +236,13 @@ public class MainActivity extends Activity implements
 	private void refreshWhenLisenseChanged(boolean isLisenseEnable) {
 		if(this.isLisenseEnable != isLisenseEnable) {
 			//之后就直接setFlashLevel就好
-			flashView.setLisenseState(flashController.islisenseEnable(), flashController.getCurrentLevel());
+			flashView.setLisenseState(isLisenseEnable, flashController.getCurrentLevel());
 			if(isLisenseEnable) {
 				btnLock.setVisibility(View.GONE);
 			} else {
 				btnLock.setVisibility(View.VISIBLE);
 			}
+			this.isLisenseEnable = isLisenseEnable;
 		}
 	}
 	

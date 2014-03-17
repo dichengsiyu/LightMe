@@ -306,7 +306,6 @@ public class FlashController {
 		if (this.lisenseState != lisenseState) {
 			this.lisenseState = lisenseState;
 
-			Toast.makeText(FlashApp.getContext(), "setLisenseState state:"+lisenseState, Toast.LENGTH_LONG).show();
 			lisenseEnable = lisenseState == MLisenseMangaer.STATE_PURCHASED
 					|| lisenseState == MLisenseMangaer.STATE_TRYING;
 			
