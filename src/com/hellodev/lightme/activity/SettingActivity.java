@@ -6,6 +6,8 @@ import com.hellodev.lightme.service.ServiceHelper;
 import com.hellodev.lightme.util.CommonDataHelper;
 import com.hellodev.lightme.util.LightmeConstants;
 import com.hellodev.lightme.util.MConnectHelper;
+import com.hellodev.lightme.util.MLisenseMangaer;
+import com.hellodev.lightme.util.MLisenseMangaer.OnLisenseStateChangeListener;
 import com.hellodev.lightme.util.MNotificationHelper;
 import com.hellodev.lightme.util.MPreferenceManager;
 import com.hellodev.lightme.util.SmartBarUtils;
@@ -31,7 +33,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 public class SettingActivity extends PreferenceActivity implements
-		OnPreferenceChangeListener, OnPreferenceClickListener, OnClickListener {
+		OnPreferenceChangeListener, OnPreferenceClickListener, OnClickListener, OnLisenseStateChangeListener {
 	private CheckBoxPreference showLauncherPanel, showKeyguardPanel,
 			enableKeyguardShock, enableSwitchSound;
 	private PreferenceScreen about, market, version;
@@ -49,6 +51,7 @@ public class SettingActivity extends PreferenceActivity implements
 	private boolean lisenseEnable = true;
 	private ImageButton btnLock;
 	private AlertDialog mLockDialog;
+	private MLisenseMangaer lisenseManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -335,12 +338,35 @@ public class SettingActivity extends PreferenceActivity implements
 						new android.content.DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
+								initLisense();
 							}
 						});
 
 			mLockDialog = builder.create();
 			mLockDialog.getWindow().setType(
 					WindowManager.LayoutParams.TYPE_APPLICATION);
+		}
+	}
+
+	@Override
+	public void onRemoteServiceConnected() {
+		int lisenseState = lisenseManager.doRemoteCheck();
+		flashController.setLisenseState(lisenseState);
+		lisenseManager.unbindRemoteService();
+		
+		refreshWhenLisenseChange(flashController.islisenseEnable());
+	}
+
+	@Override
+	public void onRemoteServiceDisconnected() {
+		lisenseManager = null;
+	}
+
+	private void initLisense() {
+		boolean purchased = flashController.isPurchased();
+		if(!purchased) {
+			lisenseManager = new MLisenseMangaer(this);
+			lisenseManager.bindRemoteService();
 		}
 	}
 }

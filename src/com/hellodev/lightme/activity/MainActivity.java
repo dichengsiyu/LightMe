@@ -279,6 +279,7 @@ public class MainActivity extends Activity implements
 						new android.content.DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
+								initLisense();
 							}
 						});
 

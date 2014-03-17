@@ -26,7 +26,7 @@
     <string name="alert_lock_message">T.T 小伙伴的LightMe为甚么锁住了？</string>
     <string name="alert_lock_positive">购买或更新</string>
     <string name="alert_lock_neutral">联系\"客服\"</string>
-    <string name="alert_lock_negetive">我再想想</string>
+    <string name="alert_lock_negetive">我再试试</string>
     
     <string name="setting">设置</string>
     <string name="setting_flash">闪光灯设置</string>
