@@ -238,7 +238,10 @@ public class SettingActivity extends PreferenceActivity implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.action_feedback:
-			connectHelper.sendFeedbackWithMail();
+			if(lisenseEnable)
+				connectHelper.sendFeedbackWithMail();
+			else
+				connectHelper.sendLockMsgWithMail(flashController.getLisenseState());
 			break;
 		case R.id.btn_lock:
 			initLockAlert();
