@@ -26,7 +26,7 @@ public class MLisenseMangaer {
 	public final static int STATE_EXPIRED = 3;
 	
 	public final static int EXPIRE_DAYS = 3;
-	public final static String APK_PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEDca3U5CRUVaqPu2n/wJQnyPGfR72CNv5zR+qA4qjxSMBUSQh55awBgR4Jrwd3G+6/yH540pB/oP+GsTp0Sof/dEFaR85968aEhBGRcnpEl9OITISZRwMp654/LD6kzdsjMBjfPXiYRSLjygcbG//gOVxZbnmU2Nz5pnuFvav8wIDAQAB";
+	public final static String APK_PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCB4xYVRA7w13J6dBWA+oERVDRnefb8J5N7zeD3e6JfExk76F59YRDbmDVPL+ztwwboy+R3RSQKIHM/DYymqAHnbq4m/tKXCS6BcL9MeH6Cc2xas2dNNfzOjDrb/5oqvzHI+0TPX3gU2ZML3Udsw4Q+QT+jYOgLbMYfbps3OZne5QIDAQAB/wJQnyPGfR72CNv5zR+qA4qjxSMBUSQh55awBgR4Jrwd3G+6/yH540pB/oP+GsTp0Sof/dEFaR85968aEhBGRcnpEl9OITISZRwMp654/LD6kzdsjMBjfPXiYRSLjygcbG//gOVxZbnmU2Nz5pnuFvav8wIDAQAB";
 	
 	private Context mContext;
 	// 服务的实例对象

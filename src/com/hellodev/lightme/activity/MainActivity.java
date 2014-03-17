@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements
 		super.onResume();
 		flashController.addObserver(this);
 		
-//		initLisense();
+		initLisense();
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}
@@ -238,7 +238,6 @@ public class MainActivity extends Activity implements
 		if(this.isLisenseEnable != isLisenseEnable) {
 			//之后就直接setFlashLevel就好
 			flashView.setLisenseState(flashController.islisenseEnable(), flashController.getCurrentLevel());
-			Toast.makeText(this, "Main Lisense状态:"+flashController.islisenseEnable(), Toast.LENGTH_LONG).show();
 			
 			if(isLisenseEnable) {
 				btnLock.setVisibility(View.GONE);
