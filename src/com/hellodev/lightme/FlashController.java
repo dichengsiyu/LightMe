@@ -10,7 +10,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.hellodev.lightme.service.ServiceHelper;
 import com.hellodev.lightme.util.MLisenseMangaer;

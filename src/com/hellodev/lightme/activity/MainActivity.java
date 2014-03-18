@@ -21,6 +21,7 @@ import com.hellodev.lightme.FlashController;
 import com.hellodev.lightme.FlashController.OnFlashLevelChangedListener;
 import com.hellodev.lightme.R;
 import com.hellodev.lightme.service.ServiceHelper;
+import com.hellodev.lightme.util.LightmeConstants;
 import com.hellodev.lightme.util.MConnectHelper;
 import com.hellodev.lightme.util.MDisplayHelper;
 import com.hellodev.lightme.util.MLisenseMangaer;
@@ -261,6 +262,7 @@ public class MainActivity extends Activity implements
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							//跳转到应用中心
+							connector.jumpToMarket(LightmeConstants.APP_IDENTIFY);
 						}
 					});
 			

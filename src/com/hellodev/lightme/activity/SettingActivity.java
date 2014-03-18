@@ -320,6 +320,7 @@ public class SettingActivity extends PreferenceActivity implements
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							//跳转到应用中心
+							connectHelper.jumpToMarket(LightmeConstants.APP_IDENTIFY);
 						}
 					});
 			
