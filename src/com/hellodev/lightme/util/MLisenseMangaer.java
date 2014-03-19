@@ -123,7 +123,7 @@ public class MLisenseMangaer {
 					 * 以下是可供参考的过期判断
 					 */
 					// 你自己定义的过期天数
-					final int expireDays = 0;
+					final int expireDays = 3;
 					// 获取当前日期
 					Calendar nowCal = Calendar.getInstance();
 					// 求剩余的天数

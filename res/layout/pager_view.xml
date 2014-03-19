@@ -8,28 +8,32 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1" />
+        android:layout_weight="3" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:orientation="vertical" >
+        android:gravity="center">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dip"
             android:background="@drawable/lightme"
             android:contentDescription="@string/app_name" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:layout_marginBottom="10dip"
+        android:gravity="center">
         <Button
             android:id="@+id/btn_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dip"
             android:background="@drawable/guide_btn_beigin" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

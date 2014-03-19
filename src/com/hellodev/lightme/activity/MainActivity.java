@@ -34,17 +34,18 @@ import com.hellodev.lightme.view.OnFlashStateChangeListener;
 import com.umeng.analytics.MobclickAgent;
 
 public class MainActivity extends Activity implements
-		OnFlashStateChangeListener, OnFlashLevelChangedListener, OnLisenseStateChangeListener, OnClickListener {
+		OnFlashStateChangeListener, OnFlashLevelChangedListener,
+		OnLisenseStateChangeListener, OnClickListener {
 	private final static String TAG = "MainActivity";
 
 	private FlashView flashView;
 	private ImageButton btnLock;
 	private FlashController flashController;
-	
+
 	private MPreferenceManager prefsMgr;
 	private GuideViewManager guideViewMgr;
 	private boolean firstSetup = false;
-	
+
 	private MConnectHelper connector;
 	private MLisenseMangaer lisenseManager;
 	private boolean isLisenseEnable = true;
@@ -56,7 +57,7 @@ public class MainActivity extends Activity implements
 		setContentView(R.layout.activity_main);
 
 		ServiceHelper.startPanelService();
-		
+
 		initData();
 		initSmartBar();
 		initView();
@@ -66,13 +67,12 @@ public class MainActivity extends Activity implements
 		MobclickAgent.updateOnlineConfig(this);// 更新在线发送策略
 		MobclickAgent.setDebugMode(false);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		flashController.addObserver(this);
-		
-//		initLisense();
+		initLisense();
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}
@@ -95,16 +95,6 @@ public class MainActivity extends Activity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public void onBackPressed() {
-		if (flashController.isFlashOn()) {
-			// FIXME 需要提示一下用户么
-			moveTaskToBack(true);
-		} else {
-			super.onBackPressed();
-		}
 	}
 
 	@Override
@@ -133,12 +123,12 @@ public class MainActivity extends Activity implements
 		flashView.setFlashLevel(flashController.turnFlashDown());
 		closeGuideView();
 	}
-	
+
 	@Override
 	public void onFlashLevelChanged(int currentLevel) {
 		flashView.setFlashLevel(currentLevel);
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -150,11 +140,11 @@ public class MainActivity extends Activity implements
 			break;
 		}
 	}
-	
+
 	private void initView() {
 		flashView = (FlashView) findViewById(R.id.btn_toggle);
 		flashView.setOnSwitchStateChangeListener(this);
-		
+
 		btnLock = (ImageButton) findViewById(R.id.btn_lock);
 		btnLock.setOnClickListener(this);
 	}
@@ -169,39 +159,44 @@ public class MainActivity extends Activity implements
 	}
 
 	private void initData() {
-		//相机和声音都在GuideActivity里面去初始化了
+		// 相机和声音都在GuideActivity里面去初始化了
 		prefsMgr = MPreferenceManager.getInstance();
 		flashController = FlashController.getInstance();
 		connector = new MConnectHelper(this);
 	}
 
 	private void releaseData() {
+		if (mLockDialog != null && mLockDialog.isShowing())
+			mLockDialog.cancel();
+
+		if (!prefsMgr.isLauncherPanelShown()
+				&& !prefsMgr.isKeyguardPanelShown()) {
+			flashController.releaseInstance();
+		}
 		prefsMgr = null;
 		flashController = null;
-		if(mLockDialog != null && mLockDialog.isShowing())
-			mLockDialog.cancel();
 	}
 
 	private void showGuideView() {
 		firstSetup = prefsMgr.getFirtStartDate() == 0;
 		if (firstSetup) {
-			
+
 			prefsMgr.setFirstStartDate();
 			firstSetup = false;
 			guideViewMgr = new GuideViewManager(this.getWindowManager(),
 					WindowManager.LayoutParams.TYPE_TOAST);
 			MDisplayHelper displayHelper = new MDisplayHelper();
 			int flashViewGuideY = displayHelper.dpiToPx(100);
-			
+
 			TextView guideView = new TextView(this);
 			guideView.setTextSize(displayHelper.dpiToPx(11));
 			guideView.setText(R.string.guide_main);
 			guideView.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
 			guideView.setTextColor(Color.WHITE);
-			guideViewMgr.add(guideView, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM,
-					0, flashViewGuideY, true);
-			
-//			flashView.setFlashLevel(flashController.toggleFlash());
+			guideViewMgr.add(guideView, Gravity.CENTER_HORIZONTAL
+					| Gravity.BOTTOM, 0, flashViewGuideY, true);
+
+			// flashView.setFlashLevel(flashController.toggleFlash());
 		}
 	}
 
@@ -211,10 +206,10 @@ public class MainActivity extends Activity implements
 			guideViewMgr = null;
 		}
 	}
-	
+
 	private void initLisense() {
 		boolean purchased = flashController.isPurchased();
-		if(!purchased) {
+		if (!purchased) {
 			lisenseManager = new MLisenseMangaer(this);
 			lisenseManager.bindRemoteService();
 		}
@@ -225,7 +220,7 @@ public class MainActivity extends Activity implements
 		int lisenseState = lisenseManager.doRemoteCheck();
 		flashController.setLisenseState(lisenseState);
 		lisenseManager.unbindRemoteService();
-		
+
 		refreshWhenLisenseChanged(flashController.islisenseEnable());
 	}
 
@@ -233,12 +228,13 @@ public class MainActivity extends Activity implements
 	public void onRemoteServiceDisconnected() {
 		lisenseManager = null;
 	}
-	
+
 	private void refreshWhenLisenseChanged(boolean isLisenseEnable) {
-		if(this.isLisenseEnable != isLisenseEnable) {
-			//之后就直接setFlashLevel就好
-			flashView.setLisenseState(isLisenseEnable, flashController.getCurrentLevel());
-			if(isLisenseEnable) {
+		if (this.isLisenseEnable != isLisenseEnable) {
+			// 之后就直接setFlashLevel就好
+			flashView.setLisenseState(isLisenseEnable,
+					flashController.getCurrentLevel());
+			if (isLisenseEnable) {
 				btnLock.setVisibility(View.GONE);
 			} else {
 				btnLock.setVisibility(View.VISIBLE);
@@ -246,44 +242,44 @@ public class MainActivity extends Activity implements
 			this.isLisenseEnable = isLisenseEnable;
 		}
 	}
-	
+
 	private void initLockAlert() {
 		if (mLockDialog == null) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(
-					this,
+			AlertDialog.Builder builder = new AlertDialog.Builder(this,
 					android.R.style.Theme_Holo_Light_Panel);
 			builder.setIcon(R.drawable.ic_logo_locked);
 			builder.setTitle(R.string.alert_lock_title);
 			builder.setMessage(R.string.alert_lock_message);
-			
+
 			builder.setPositiveButton(R.string.alert_lock_positive,
 					new android.content.DialogInterface.OnClickListener() {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//跳转到应用中心
-							connector.jumpToMarket(LightmeConstants.APP_IDENTIFY);
+							// 跳转到应用中心
+							connector
+									.jumpToMarket(LightmeConstants.APP_IDENTIFY);
 						}
 					});
-			
-				builder.setNeutralButton(R.string.alert_lock_neutral,
-						new android.content.DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								//联系开发者
-								connector.sendLockMsgWithMail(flashController.getLisenseState());
-							}
-						});
-				
+			builder.setNeutralButton(R.string.alert_lock_neutral,
+					new android.content.DialogInterface.OnClickListener() {
 
-				builder.setNegativeButton(R.string.alert_lock_negetive,
-						new android.content.DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								initLisense();
-							}
-						});
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// 联系开发者
+							connector.sendLockMsgWithMail(flashController
+									.getLisenseState());
+						}
+					});
+
+			builder.setNegativeButton(R.string.alert_lock_negetive,
+					new android.content.DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							initLisense();
+						}
+					});
 
 			mLockDialog = builder.create();
 			mLockDialog.getWindow().setType(
