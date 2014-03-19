@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements
 	protected void onResume() {
 		super.onResume();
 		flashController.addObserver(this);
-		initLisense();
+//		initLisense();
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}
@@ -175,6 +175,7 @@ public class MainActivity extends Activity implements
 		}
 		prefsMgr = null;
 		flashController = null;
+		flashView.releaseData();
 	}
 
 	private void showGuideView() {

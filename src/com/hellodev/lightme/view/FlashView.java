@@ -26,6 +26,9 @@ public class FlashView extends View {
 	private float LEVEL_DISTANCE_INTERVAL = 20;
 	private int SCREEN_WIDTH;
 
+	//flash
+	private int FLASH_BITMAP_START_X;
+	
 	// Flash Light
 	private int FLASH_END_X_MAX;
 	private int FLASH_END_X_INTERVAL;
@@ -34,42 +37,25 @@ public class FlashView extends View {
 
 	private int FLASH_START_SIZE;
 	private int FLASH_START_Y;
+	private int FLASH_START_X;
 
-	// Eye
-	private int EYE_POS_Y;
-	private int[] eyeReses = {
-			R.drawable.eye_7,
-			R.drawable.eye_7,
-			R.drawable.eye_7,
-			R.drawable.eye_7,
-			R.drawable.eye_7,
-			R.drawable.eye_7,
-			R.drawable.eye_7,
-			R.drawable.eye_7};
-	private Bitmap[] eyeBitmaps;
+	//emotion
+	private int EMOTION_POS_Y;
+	private int[] emotionReses = {
+			R.drawable.emotion_7,
+			R.drawable.emotion_7,
+			R.drawable.emotion_7,
+			R.drawable.emotion_7,
+			R.drawable.emotion_7,
+			R.drawable.emotion_5,
+			R.drawable.emotion_6,
+			R.drawable.emotion_7};
+	private Bitmap[] emotionBitmaps;
 	
-	private int[] eyeLockedReses = {};
-	private Bitmap[] eyeLockedBitmaps;
-	
-	// Mouth
-	private int MOUTH_POS_Y;
-	private int[] mouthReses = {
-			R.drawable.mouth_7,
-			R.drawable.mouth_7,
-			R.drawable.mouth_7,
-			R.drawable.mouth_7,
-			R.drawable.mouth_7,
-			R.drawable.mouth_7,
-			R.drawable.mouth_7,
-			R.drawable.mouth_7
-			};
-	private Bitmap[] mouthBitmaps;
-	
-	private int[] mouthLockedReses = {};
-	private Bitmap[] mouthLockedBitmaps;
+	private int[] emotionLockedReses = {};
+	private Bitmap[] emotionLockedBitmaps;
 	
 	//flash
-	private int FLASH_BITMAP_OFFSET;
 	private Bitmap flashOffBitmap, flashOnBitmap;
 
 	private final static float FLASH_ON_COLOR_H;
@@ -109,26 +95,18 @@ public class FlashView extends View {
 		FLASH_END_X_MIN = FLASH_END_X_MAX - FLASH_END_X_INTERVAL
 				* (LEVEL_COUNT - 1);
 
-		FLASH_START_SIZE = displayHelper.dpiToPx(30);
+		FLASH_START_SIZE = displayHelper.dpiToPx(28);
 		FLASH_START_Y = displayHelper.dpiToPx(345);
 
 		Resources resource = getResources();
 		// Eye
-		EYE_POS_Y = displayHelper.dpiToPx(90);
-		eyeBitmaps = new Bitmap[LEVEL_COUNT + 1];
+		EMOTION_POS_Y = displayHelper.dpiToPx(90);
+		emotionBitmaps = new Bitmap[LEVEL_COUNT + 1];
 		for(int i = 0; i < LEVEL_COUNT + 1; ++i) {
-			eyeBitmaps[i] = BitmapFactory.decodeResource(resource,
-					eyeReses[i]);
-		}
-		// Mouth
-		MOUTH_POS_Y = displayHelper.dpiToPx(200);
-		mouthBitmaps = new Bitmap[LEVEL_COUNT + 1];
-		for(int i = 0; i < LEVEL_COUNT + 1; ++i) {
-			mouthBitmaps[i] = BitmapFactory.decodeResource(resource,
-					mouthReses[i]);
+			emotionBitmaps[i] = BitmapFactory.decodeResource(resource,
+					emotionReses[i]);
 		}
 		// Flash bitmap
-		FLASH_BITMAP_OFFSET = displayHelper.dpiToPx(6);
 		flashOffBitmap = BitmapFactory.decodeResource(resource,
 				R.drawable.flash_off);
 		flashOnBitmap = BitmapFactory.decodeResource(resource,
@@ -258,11 +236,9 @@ public class FlashView extends View {
 
 		// draw Flash
 		if (!isFlashOn)
-			canvas.drawBitmap(flashOffBitmap, flashStartXLeft, FLASH_START_Y
-					+ FLASH_BITMAP_OFFSET, mFlashPaint);
+			canvas.drawBitmap(flashOffBitmap, flashStartXLeft, FLASH_START_Y, mFlashPaint);
 		else
-			canvas.drawBitmap(flashOnBitmap, flashStartXLeft, FLASH_START_Y
-					+ FLASH_BITMAP_OFFSET, mFlashPaint);
+			canvas.drawBitmap(flashOnBitmap, flashStartXLeft, FLASH_START_Y, mFlashPaint);
 
 		// draw Flash light
 		mFlashPaint.setStyle(Paint.Style.FILL);
@@ -276,39 +252,44 @@ public class FlashView extends View {
 		mFlashPath.close();
 		canvas.drawPath(mFlashPath, mFlashPaint);
 
-		// draw Eye
-		Bitmap eyeBitmap = getCurrentEyeBitmap(lisenseEnable, mCurrentLevel);
-		float eyePosX = centerX - eyeBitmap.getWidth()/2;
-		canvas.drawBitmap(eyeBitmap, eyePosX, EYE_POS_Y, mFlashPaint);
-		// draw mouth
-		Bitmap mouthBitmap = getCurrentMouthBitmap(lisenseEnable, mCurrentLevel);
-		float mouthPosX = centerX - mouthBitmap.getWidth()/2;
-		canvas.drawBitmap(mouthBitmap, mouthPosX, MOUTH_POS_Y, mFlashPaint);
+		// draw Emotion
+		Bitmap emotionBitmap = getCurrentEmotionBitmap(lisenseEnable, mCurrentLevel);
+		float emotionPosX = centerX - emotionBitmap.getWidth()/2;
+		canvas.drawBitmap(emotionBitmap, emotionPosX, EMOTION_POS_Y, mFlashPaint);
 		
 		if(!lisenseEnable) {
 			//draw tear
 		}
 	};
 	
-	private Bitmap getCurrentEyeBitmap(boolean isLisenseEnable, int flashLevel) {
+	private Bitmap getCurrentEmotionBitmap(boolean isLisenseEnable, int flashLevel) {
 		Bitmap eyeBitmap;
 		if(isLisenseEnable) {
-			eyeBitmap = eyeBitmaps[flashLevel];
+			eyeBitmap = emotionBitmaps[flashLevel];
 		} else {
 			boolean isFlashOn = flashLevel > FlashController.LEVEL_OFF;
-			eyeBitmap = isFlashOn? eyeLockedBitmaps[1]: eyeLockedBitmaps[0];
+			eyeBitmap = isFlashOn? emotionLockedBitmaps[1]: emotionLockedBitmaps[0];
 		}
 		return eyeBitmap;
 	}
 	
-	private Bitmap getCurrentMouthBitmap(boolean isLisenseEnable, int flashLevel) {
-		Bitmap mouthBitmap;
-		if(isLisenseEnable) {
-			mouthBitmap = mouthBitmaps[flashLevel];
-		} else {
-			boolean isFlashOn = flashLevel > FlashController.LEVEL_OFF;
-			mouthBitmap = isFlashOn? mouthLockedBitmaps[1]: mouthLockedBitmaps[0];
+	public void releaseData() {
+		int sizeOfEmotion = emotionBitmaps != null? emotionBitmaps.length: 0;
+		for(int i = 0; i < sizeOfEmotion; ++i) {
+			emotionBitmaps[i].recycle();
 		}
-		return mouthBitmap;
+		
+		int sizeOfEmotionLocked = emotionLockedBitmaps != null? emotionLockedBitmaps.length: 0;
+		for(int i = 0; i < sizeOfEmotionLocked; ++i) {
+			emotionLockedBitmaps[i].recycle();
+		}
+		
+		if(flashOnBitmap != null) {
+			flashOnBitmap.recycle();
+		}
+		
+		if(flashOffBitmap != null) {
+			flashOffBitmap.recycle();
+		}
 	}
 }
