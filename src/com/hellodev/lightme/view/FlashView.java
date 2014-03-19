@@ -1,6 +1,7 @@
 package com.hellodev.lightme.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -35,35 +36,39 @@ public class FlashView extends View {
 	private int FLASH_START_Y;
 
 	// Eye
-	private int EYE_DISTANCE_MIN;
-	private int EYE_DISTANCE_INTERVAL;
-	private int EYE_Y_MIN;
-	private int EYE_Y_INTERVAL;
-
-	private int EYE_SIZE_X_MAX;
-	private int EYE_SIZE_X_INTERVAL;
-	private int EYE_SIZE_Y_MAX;
-	private int EYE_SIZE_Y_INTERVAL;
+	private int EYE_POS_Y;
+	private int[] eyeReses = {
+			R.drawable.eye_7,
+			R.drawable.eye_7,
+			R.drawable.eye_7,
+			R.drawable.eye_7,
+			R.drawable.eye_7,
+			R.drawable.eye_7,
+			R.drawable.eye_7,
+			R.drawable.eye_7};
+	private Bitmap[] eyeBitmaps;
 	
-	private int TEAR_SIZE_Y;
-
+	private int[] eyeLockedReses = {};
+	private Bitmap[] eyeLockedBitmaps;
+	
 	// Mouth
-	private int MOUTH_SIZE_X_MAX;
-	private int MOUTH_SIZE_X_INTERVAL;
-	private int MOUTH_SIZE_Y_MAX;
-	private int MOUTH_SIZE_Y_INTERVAL;
-
-	private int MOUTH_Y_MIN;
-	private int MOUTH_Y_INTERVAL;
+	private int MOUTH_POS_Y;
+	private int[] mouthReses = {
+			R.drawable.mouth_7,
+			R.drawable.mouth_7,
+			R.drawable.mouth_7,
+			R.drawable.mouth_7,
+			R.drawable.mouth_7,
+			R.drawable.mouth_7,
+			R.drawable.mouth_7,
+			R.drawable.mouth_7
+			};
+	private Bitmap[] mouthBitmaps;
 	
-	//Mouth off
-	private int MOUTH_OFF_SIZE_X;
-	private int MOUTH_OFF_SIZE_Y;
-
-	private final static float FACE_STROKE_SIZE_INTERVAL = 0.05f;
-	private int FACE_STROKE_SIZE_X;
-	private int FACE_STROKE_SIZE_Y;
-
+	private int[] mouthLockedReses = {};
+	private Bitmap[] mouthLockedBitmaps;
+	
+	//flash
 	private int FLASH_BITMAP_OFFSET;
 	private Bitmap flashOffBitmap, flashOnBitmap;
 
@@ -107,40 +112,26 @@ public class FlashView extends View {
 		FLASH_START_SIZE = displayHelper.dpiToPx(30);
 		FLASH_START_Y = displayHelper.dpiToPx(345);
 
+		Resources resource = getResources();
 		// Eye
-		EYE_DISTANCE_MIN = displayHelper.dpiToPx(68);
-		EYE_DISTANCE_INTERVAL = displayHelper.dpiToPx(4);
-		EYE_Y_MIN = displayHelper.dpiToPx(100);
-		EYE_Y_INTERVAL = displayHelper.dpiToPx(2);
-
-		EYE_SIZE_X_MAX = displayHelper.dpiToPx(34);
-		EYE_SIZE_X_INTERVAL = displayHelper.dpiToPx(2);
-		EYE_SIZE_Y_MAX = displayHelper.dpiToPx(12);
-		EYE_SIZE_Y_INTERVAL = displayHelper.dpiToPx(0.6f);
-
-		TEAR_SIZE_Y = displayHelper.dpiToPx(70);
-
+		EYE_POS_Y = displayHelper.dpiToPx(90);
+		eyeBitmaps = new Bitmap[LEVEL_COUNT + 1];
+		for(int i = 0; i < LEVEL_COUNT + 1; ++i) {
+			eyeBitmaps[i] = BitmapFactory.decodeResource(resource,
+					eyeReses[i]);
+		}
 		// Mouth
-		MOUTH_SIZE_X_MAX = displayHelper.dpiToPx(36);
-		MOUTH_SIZE_X_INTERVAL = displayHelper.dpiToPx(6);
-		MOUTH_SIZE_Y_MAX = displayHelper.dpiToPx(14);
-		MOUTH_SIZE_Y_INTERVAL = displayHelper.dpiToPx(1);
-
-		MOUTH_Y_MIN = displayHelper.dpiToPx(220);
-		MOUTH_Y_INTERVAL = displayHelper.dpiToPx(4);
-		
-		MOUTH_OFF_SIZE_X = displayHelper.dpiToPx(12);
-		MOUTH_OFF_SIZE_Y = displayHelper.dpiToPx(8);
-
-		// Stroke
-		FACE_STROKE_SIZE_X = displayHelper.dpiToPx(11);
-		FACE_STROKE_SIZE_Y = displayHelper.dpiToPx(7);
-
+		MOUTH_POS_Y = displayHelper.dpiToPx(200);
+		mouthBitmaps = new Bitmap[LEVEL_COUNT + 1];
+		for(int i = 0; i < LEVEL_COUNT + 1; ++i) {
+			mouthBitmaps[i] = BitmapFactory.decodeResource(resource,
+					mouthReses[i]);
+		}
 		// Flash bitmap
 		FLASH_BITMAP_OFFSET = displayHelper.dpiToPx(6);
-		flashOffBitmap = BitmapFactory.decodeResource(getResources(),
+		flashOffBitmap = BitmapFactory.decodeResource(resource,
 				R.drawable.flash_off);
-		flashOnBitmap = BitmapFactory.decodeResource(getResources(),
+		flashOnBitmap = BitmapFactory.decodeResource(resource,
 				R.drawable.flash_on);
 		
 		mFlashPaint = new Paint();
@@ -265,11 +256,6 @@ public class FlashView extends View {
 		float flashEndXLeft = (FLASH_END_X_MAX - flashEndSize) / 2;
 		float flashEndXRight = FLASH_END_X_MAX - flashEndXLeft;
 
-		float currentStrokeRate = 1 - FACE_STROKE_SIZE_INTERVAL
-				* (LEVEL_COUNT - level);
-		float strokeSizeX = FACE_STROKE_SIZE_X * currentStrokeRate;
-		float strokeSizeY = FACE_STROKE_SIZE_Y * currentStrokeRate;
-
 		// draw Flash
 		if (!isFlashOn)
 			canvas.drawBitmap(flashOffBitmap, flashStartXLeft, FLASH_START_Y
@@ -290,114 +276,39 @@ public class FlashView extends View {
 		mFlashPath.close();
 		canvas.drawPath(mFlashPath, mFlashPaint);
 
-		if(lisenseEnable) {
-			// draw Eye
-			mFlashPaint.setColor(Color.BLACK);
-			float eyeSizeX = (EYE_SIZE_X_MAX - (LEVEL_COUNT - level)
-					* EYE_SIZE_X_INTERVAL)
-					* currentStrokeRate;
-			float eyeSizeY = (EYE_SIZE_Y_MAX - (LEVEL_COUNT - level)
-					* EYE_SIZE_Y_INTERVAL)
-					* currentStrokeRate;
-
-			float eyeDistance = (EYE_DISTANCE_MIN + (level - 1)
-					* EYE_DISTANCE_INTERVAL)
-					* currentStrokeRate;
-			float leftEyeStartX = SCREEN_WIDTH / 2 - eyeDistance / 2 - eyeSizeX;
-			float rightEyeStartX = SCREEN_WIDTH / 2 + eyeDistance / 2;
-			float eyeStartY = EYE_Y_MIN + EYE_Y_INTERVAL * (level - 1);
-			float eyeBallOffset = (float) (eyeSizeX * (1.0 * level / LEVEL_COUNT));
-
-			// draw mouth
-			float mouthSizeX = (MOUTH_SIZE_X_MAX - (LEVEL_COUNT - level)
-					* MOUTH_SIZE_X_INTERVAL)
-					* currentStrokeRate;
-			float mouthSizeY = (MOUTH_SIZE_Y_MAX - (LEVEL_COUNT - level)
-					* MOUTH_SIZE_Y_INTERVAL)
-					* currentStrokeRate;
-			float mouthStartX = SCREEN_WIDTH / 2 - mouthSizeX / 2;
-			float mouthStartY = MOUTH_Y_MIN + MOUTH_Y_INTERVAL
-					* (LEVEL_COUNT - level);
-
-			mFlashPaint.setStrokeWidth(strokeSizeX);
-			canvas.drawLine(leftEyeStartX, eyeStartY, leftEyeStartX + eyeSizeX,
-					eyeStartY, mFlashPaint);
-			canvas.drawLine(rightEyeStartX, eyeStartY, rightEyeStartX + eyeSizeX,
-					eyeStartY, mFlashPaint);
-			if(isFlashOn){
-				canvas.drawLine(mouthStartX, mouthStartY, mouthStartX + mouthSizeX,
-						mouthStartY, mFlashPaint);
-			}
-
-			mFlashPaint.setStrokeWidth(strokeSizeY);
-			canvas.drawLine(leftEyeStartX + eyeBallOffset, eyeStartY - strokeSizeX
-					/ 2, leftEyeStartX + eyeBallOffset, eyeStartY + eyeSizeY,
-					mFlashPaint);
-			canvas.drawLine(rightEyeStartX + eyeBallOffset, eyeStartY - strokeSizeX
-					/ 2, rightEyeStartX + eyeBallOffset, eyeStartY + eyeSizeY,
-					mFlashPaint);
-			if(isFlashOn) {
-				canvas.drawLine(mouthStartX + mouthSizeX,
-						mouthStartY + strokeSizeX / 2, mouthStartX + mouthSizeX,
-						mouthStartY - mouthSizeY, mFlashPaint);
-			}
-			else {
-				float mouthLeftX = centerX - MOUTH_OFF_SIZE_X/2;
-				float mouthRightX = centerX + MOUTH_OFF_SIZE_X/2;
-				float mouthEndY = mouthStartY + MOUTH_OFF_SIZE_Y;
-				mFlashPath.reset();
-				mFlashPaint.setStyle(Paint.Style.STROKE);   
-				mFlashPath.moveTo(mouthLeftX, mouthStartY);
-				mFlashPath.lineTo(centerX, mouthEndY);
-				mFlashPath.lineTo(mouthRightX, mouthStartY);
-				canvas.drawPath(mFlashPath, mFlashPaint);
-			}
-		} else {
-			// draw Eye
-			mFlashPaint.setColor(Color.BLACK);
-			
-			float eyeSizeX = isFlashOn ? EYE_SIZE_X_MAX: EYE_SIZE_X_MAX * 0.6f;
-			float eyeDistance = (EYE_DISTANCE_MIN + (level - 1)
-					* EYE_DISTANCE_INTERVAL)
-					* currentStrokeRate;
-			
-			float leftEyeStartX = SCREEN_WIDTH / 2 - eyeDistance / 2 - eyeSizeX;
-			float rightEyeStartX = SCREEN_WIDTH / 2 + eyeDistance / 2;
-			float eyeStartY = EYE_Y_MIN + EYE_Y_INTERVAL * (level - 1);
-			
-			// draw mouth
-			float mouthSizeX = isFlashOn? MOUTH_SIZE_X_MAX : MOUTH_SIZE_X_MAX * 0.6f;
-			float mouthSizeY = isFlashOn? MOUTH_SIZE_Y_MAX : MOUTH_SIZE_Y_MAX * 0.6f;
-			float mouthStartX = SCREEN_WIDTH / 2 - mouthSizeX / 2;
-			float mouthStartY = MOUTH_Y_MIN + MOUTH_Y_INTERVAL
-					* (LEVEL_COUNT - level);
-			
-			mFlashPaint.setStrokeWidth(strokeSizeX);
-			canvas.drawLine(leftEyeStartX, eyeStartY, leftEyeStartX + eyeSizeX,
-					eyeStartY, mFlashPaint);
-			canvas.drawLine(rightEyeStartX, eyeStartY, rightEyeStartX + eyeSizeX,
-					eyeStartY, mFlashPaint);
-			canvas.drawLine(mouthStartX, mouthStartY, mouthStartX + mouthSizeX,
-					mouthStartY, mFlashPaint);
-			
-			mFlashPaint.setStrokeWidth(strokeSizeY);
-			canvas.drawLine(mouthStartX + mouthSizeX - strokeSizeY/2,
-					mouthStartY - strokeSizeX/2, mouthStartX + mouthSizeX - strokeSizeY/2,
-					mouthStartY + mouthSizeY, mFlashPaint);
-			
+		// draw Eye
+		Bitmap eyeBitmap = getCurrentEyeBitmap(lisenseEnable, mCurrentLevel);
+		float eyePosX = centerX - eyeBitmap.getWidth()/2;
+		canvas.drawBitmap(eyeBitmap, eyePosX, EYE_POS_Y, mFlashPaint);
+		// draw mouth
+		Bitmap mouthBitmap = getCurrentMouthBitmap(lisenseEnable, mCurrentLevel);
+		float mouthPosX = centerX - mouthBitmap.getWidth()/2;
+		canvas.drawBitmap(mouthBitmap, mouthPosX, MOUTH_POS_Y, mFlashPaint);
+		
+		if(!lisenseEnable) {
 			//draw tear
-			float tearStrokeSize = eyeSizeX * 0.4f;
-			mFlashPaint.setColor(Color.WHITE);
-			mFlashPaint.setStrokeWidth(tearStrokeSize);
-			
-			float leftTearStartX = leftEyeStartX + eyeSizeX/2 ;
-			float rightTearStartX = rightEyeStartX + eyeSizeX/2;
-			float tearStartY = eyeStartY + strokeSizeX/2;
-			float tearSizeY = isFlashOn? TEAR_SIZE_Y : TEAR_SIZE_Y * 0.6f;
-			canvas.drawLine(leftTearStartX, tearStartY, leftTearStartX, tearStartY + tearSizeY,
-					mFlashPaint);
-			canvas.drawLine(rightTearStartX, tearStartY, rightTearStartX, tearStartY + tearSizeY,
-					mFlashPaint);
 		}
 	};
+	
+	private Bitmap getCurrentEyeBitmap(boolean isLisenseEnable, int flashLevel) {
+		Bitmap eyeBitmap;
+		if(isLisenseEnable) {
+			eyeBitmap = eyeBitmaps[flashLevel];
+		} else {
+			boolean isFlashOn = flashLevel > FlashController.LEVEL_OFF;
+			eyeBitmap = isFlashOn? eyeLockedBitmaps[1]: eyeLockedBitmaps[0];
+		}
+		return eyeBitmap;
+	}
+	
+	private Bitmap getCurrentMouthBitmap(boolean isLisenseEnable, int flashLevel) {
+		Bitmap mouthBitmap;
+		if(isLisenseEnable) {
+			mouthBitmap = mouthBitmaps[flashLevel];
+		} else {
+			boolean isFlashOn = flashLevel > FlashController.LEVEL_OFF;
+			mouthBitmap = isFlashOn? mouthLockedBitmaps[1]: mouthLockedBitmaps[0];
+		}
+		return mouthBitmap;
+	}
 }

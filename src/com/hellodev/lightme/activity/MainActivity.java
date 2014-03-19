@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements
 		super.onResume();
 		flashController.addObserver(this);
 		
-		initLisense();
+//		initLisense();
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}
