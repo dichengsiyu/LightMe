@@ -15,6 +15,7 @@ public class MNotificationHelper {
 	public final static int NOTIFICATION_TYPE_LAUCHER_PANEL = 0;
 	public final static int NOTIFICATION_TYPE_KEYGUARD_PANEL = 1;
 	public final static int NOTIFICATION_TYPE_KEYGUARD_SHOCK = 2;
+	public final static int NOTIFICATION_TYPE_CLOSE_PANEL = 3;
 	
 	private NotificationManager mManager;
 	
@@ -54,7 +55,7 @@ public class MNotificationHelper {
 		Intent intent = new Intent(context, SettingActivity.class);
 		PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		builder.setContentIntent(pi);
-		mManager.notify(0, builder.build());
+		mManager.notify(notifyType, builder.build());
 	}
 	
 	public void notifyPanelCloseWhenLock() {
@@ -72,7 +73,10 @@ public class MNotificationHelper {
 		Intent intent = new Intent(context, SettingActivity.class);
 		PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		builder.setContentIntent(pi);
-		mManager.notify(0, builder.build());
+		mManager.notify(NOTIFICATION_TYPE_CLOSE_PANEL, builder.build());
+		cancelPanelOpenNotify(NOTIFICATION_TYPE_LAUCHER_PANEL);
+		cancelPanelOpenNotify(NOTIFICATION_TYPE_KEYGUARD_PANEL);
+		cancelPanelOpenNotify(NOTIFICATION_TYPE_KEYGUARD_SHOCK);
 	}
 	
 	public void cancelPanelOpenNotify(int notifyType) {

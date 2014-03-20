@@ -90,17 +90,20 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				.getSystemService(Context.KEYGUARD_SERVICE);
 		//这个只在锁屏界面才需要监听
 		mPhoneStateListener = new PhoneStateListener() {
+			int lastState = TelephonyManager.CALL_STATE_IDLE;
 			@Override
 			public void onCallStateChanged(int state,
 					String incomingNumber) {
-				if(state == TelephonyManager.CALL_STATE_IDLE) {
-					mKeyguardPanelManager.showPanel();
-					if (mPrefsManager.isKeyguardShockEnable())
-						mShakeDetector.start();//FIXME需要测试
-				} else if(state == TelephonyManager.CALL_STATE_RINGING) {
-					mKeyguardPanelManager.hidePanel();
-					if (mPrefsManager.isKeyguardShockEnable())
-						mShakeDetector.stop();
+				if(state != lastState && isKeyguardServiceAlive) {
+					if(state == TelephonyManager.CALL_STATE_IDLE) {
+						mKeyguardPanelManager.showPanel();
+						if (mPrefsManager.isKeyguardShockEnable())
+							mShakeDetector.start();//FIXME需要测试
+					} else if(state == TelephonyManager.CALL_STATE_RINGING) {
+						mKeyguardPanelManager.hidePanel();
+						if (mPrefsManager.isKeyguardShockEnable())
+							mShakeDetector.stop();
+					}
 				}
 				super.onCallStateChanged(state, incomingNumber);
 			}
@@ -494,8 +497,8 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		lisenseManager.unbindRemoteService();
 		
 		if(flashController.islisenseEnable() == false) {
-			stopKeyguardPanel();
-			stopLauncherPanel();
+			handleStop(ACTION_PANEL_SERVICE);
+			mPrefsManager.setNeedRefreshSetting(true);
 			MNotificationHelper notify = new MNotificationHelper();
 			notify.notifyPanelCloseWhenLock();
 		}

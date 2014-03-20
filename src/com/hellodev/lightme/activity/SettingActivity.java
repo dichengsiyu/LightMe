@@ -258,6 +258,10 @@ public class SettingActivity extends PreferenceActivity implements
 	private void refreshWhenLisenseChange(boolean lisenseEnable) {
 		if(this.lisenseEnable != lisenseEnable) {
 			this.lisenseEnable = lisenseEnable;
+			
+			ActionBar actionBar = getActionBar();
+			int icon = flashController.islisenseEnable()? R.drawable.ic_logo: R.drawable.ic_logo_locked;
+			actionBar.setIcon(icon);
 		
 			if(lisenseEnable) {
 				showLauncherPanel.setEnabled(true);
