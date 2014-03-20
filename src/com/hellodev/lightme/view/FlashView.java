@@ -42,17 +42,19 @@ public class FlashView extends View {
 	//emotion
 	private int EMOTION_POS_Y;
 	private int[] emotionReses = {
-			R.drawable.emotion_7,
-			R.drawable.emotion_7,
-			R.drawable.emotion_7,
-			R.drawable.emotion_7,
-			R.drawable.emotion_7,
+			R.drawable.emotion_0,
+			R.drawable.emotion_1,
+			R.drawable.emotion_2,
+			R.drawable.emotion_3,
+			R.drawable.emotion_4,
 			R.drawable.emotion_5,
 			R.drawable.emotion_6,
 			R.drawable.emotion_7};
 	private Bitmap[] emotionBitmaps;
 	
-	private int[] emotionLockedReses = {};
+	private int[] emotionLockedReses = {
+			R.drawable.emotion_locked_off,
+			R.drawable.emotion_locked_on};
 	private Bitmap[] emotionLockedBitmaps;
 	
 	//flash
@@ -105,6 +107,12 @@ public class FlashView extends View {
 		for(int i = 0; i < LEVEL_COUNT + 1; ++i) {
 			emotionBitmaps[i] = BitmapFactory.decodeResource(resource,
 					emotionReses[i]);
+		}
+		
+		emotionLockedBitmaps = new Bitmap[2];
+		for(int i = 0; i < 2; ++i) {
+			emotionLockedBitmaps[i] = BitmapFactory.decodeResource(resource,
+					emotionLockedReses[i]);
 		}
 		// Flash bitmap
 		flashOffBitmap = BitmapFactory.decodeResource(resource,
@@ -252,14 +260,15 @@ public class FlashView extends View {
 		mFlashPath.close();
 		canvas.drawPath(mFlashPath, mFlashPaint);
 
-		// draw Emotion
-		Bitmap emotionBitmap = getCurrentEmotionBitmap(lisenseEnable, mCurrentLevel);
+		Bitmap emotionBitmap;
+		if(lisenseEnable) {
+			// draw Emotion
+			emotionBitmap = getCurrentEmotionBitmap(lisenseEnable, mCurrentLevel);
+		} else {
+			emotionBitmap = isFlashOn? emotionLockedBitmaps[1]: emotionLockedBitmaps[0];
+		}
 		float emotionPosX = centerX - emotionBitmap.getWidth()/2;
 		canvas.drawBitmap(emotionBitmap, emotionPosX, EMOTION_POS_Y, mFlashPaint);
-		
-		if(!lisenseEnable) {
-			//draw tear
-		}
 	};
 	
 	private Bitmap getCurrentEmotionBitmap(boolean isLisenseEnable, int flashLevel) {
