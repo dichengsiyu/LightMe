@@ -103,8 +103,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 						mKeyguardPanelManager.hidePanel();
 						if (mPrefsManager.isKeyguardShockEnable())
 							mShakeDetector.stop();
+						
 					}
 				}
+				lastState = state;
 				super.onCallStateChanged(state, incomingNumber);
 			}
 		};
@@ -316,7 +318,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			}
 			
 			//foreground
-			startForeground(1, new Notification());
+			startForeground(1000, new Notification());
 		}
 	}
 

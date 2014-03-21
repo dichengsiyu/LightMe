@@ -27,12 +27,12 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:layout_marginBottom="10dip"
         android:gravity="center">
         <Button
             android:id="@+id/btn_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="50dip"
             android:background="@drawable/guide_btn_beigin" />
     </RelativeLayout>
 

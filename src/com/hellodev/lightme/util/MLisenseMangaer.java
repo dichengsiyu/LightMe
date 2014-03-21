@@ -97,6 +97,7 @@ public class MLisenseMangaer {
 			} catch (RemoteException e) {
 				Log.e(TAG, "获取证书失败");
 				// 作为UNKNOWN来处理，这种异常不需要显示错误
+				lisenseState = STATE_TRYING;
 			}
 
 			if (result != null
@@ -140,7 +141,6 @@ public class MLisenseMangaer {
 						Log.e(TAG, "过期");
 						lisenseState = STATE_EXPIRED;
 					}
-
 					// FIXME 获取子产品
 				} else {
 					// 验证不成功或者版本类型不对，可按试用版处理

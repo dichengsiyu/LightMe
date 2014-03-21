@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements
 	protected void onResume() {
 		super.onResume();
 		flashController.addObserver(this);
-//		initLisense();
+		initLisense();
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}
@@ -169,8 +169,7 @@ public class MainActivity extends Activity implements
 		if (mLockDialog != null && mLockDialog.isShowing())
 			mLockDialog.cancel();
 
-		if (!prefsMgr.isLauncherPanelShown()
-				&& !prefsMgr.isKeyguardPanelShown()) {
+		if (!prefsMgr.isLauncherPanelShown()) {
 			flashController.releaseInstance();
 		}
 		prefsMgr = null;
