@@ -138,7 +138,7 @@ public class SettingActivity extends PreferenceActivity implements
 						MPreferenceManager.KEY_SHOW_LAUNCHER_PANEL, "false");
 				ServiceHelper.stopLauncherPanelService();
 				mNotifyHelper
-						.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_LAUCHER_PANEL);
+						.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_LAUCHER_PANEL);
 			}
 		} else if (preference == showKeyguardPanel) {
 			if (newValue.equals(true)) {
@@ -153,7 +153,9 @@ public class SettingActivity extends PreferenceActivity implements
 				enableKeyguardShock.setChecked(false);
 				ServiceHelper.stopKeyguardPanelService();
 				mNotifyHelper
-						.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_PANEL);
+						.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_PANEL);
+				mNotifyHelper
+						.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_SHOCK);
 			}
 		} else if (preference == enableKeyguardShock) {
 			if (newValue.equals(true)) {
@@ -165,7 +167,7 @@ public class SettingActivity extends PreferenceActivity implements
 				MobclickAgent.onEvent(this,
 						MPreferenceManager.KEY_KEYGURAD_SHOCK_ENABLE, "false");
 				mNotifyHelper
-						.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_SHOCK);
+						.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_SHOCK);
 			}
 		} else if (preference == enableSwitchSound) {
 			if (newValue.equals(true)) {

@@ -229,7 +229,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 *  如果在锁屏界面才监听电话
 	 */
 	private void handleScreenOn() {
-		initLisense();
+//		initLisense();
 		if (!isKeyguardScreen()) {
 			if (isKeyguardServiceAlive)
 				mKeyguardPanelManager.hidePanel();
@@ -335,7 +335,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			// stopService
 			//FIXME 这样会导致只打开锁屏的时候会有一段时间关闭锁屏开关
 			stopForeground(true);
-			notifyHelper.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_LAUCHER_PANEL);
+			notifyHelper.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_LAUCHER_PANEL);
 		}
 	}
 
@@ -400,8 +400,8 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			//如果是可以摇动的时候
 			mShakeDetector.stop();
 			
-			notifyHelper.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_PANEL);
-			notifyHelper.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_SHOCK);
+			notifyHelper.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_PANEL);
+			notifyHelper.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_SHOCK);
 		}
 	}
 
@@ -473,8 +473,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				this.cancel();
 			} else {
 				boolean isHome = isHome();
-				if (isHome && isHomeLastInterval == false)
+				if (isHome && isHomeLastInterval == false) {
+					flashController.initCamera();
 					requestShowLauncherPanel();
+				}
 				else if(isHome == false && isHomeLastInterval == true)
 					requestHideLauncherPanel();
 			}

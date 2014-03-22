@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements
 	protected void onResume() {
 		super.onResume();
 		flashController.addObserver(this);
-		initLisense();
+//		initLisense();
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}
@@ -89,6 +89,14 @@ public class MainActivity extends Activity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		releaseData();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if (!prefsMgr.isLauncherPanelShown()) {
+			flashController.turnFlashOff();
+		}
+		super.onBackPressed();
 	}
 
 	@Override
@@ -169,9 +177,11 @@ public class MainActivity extends Activity implements
 		if (mLockDialog != null && mLockDialog.isShowing())
 			mLockDialog.cancel();
 
-		if (!prefsMgr.isLauncherPanelShown()) {
+		if(!prefsMgr.isKeyguardPanelShown()
+				&& !prefsMgr.isLauncherPanelShown()) {
 			flashController.releaseInstance();
 		}
+		
 		prefsMgr = null;
 		flashController = null;
 		flashView.releaseData();

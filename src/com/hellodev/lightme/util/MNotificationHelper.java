@@ -76,7 +76,7 @@ public class MNotificationHelper {
 		mManager.notify(NOTIFICATION_TYPE_CLOSE_PANEL, builder.build());
 	}
 	
-	public void cancelPanelOpenNotify(int notifyType) {
+	public void cancelNotify(int notifyType) {
 		mManager.cancel(notifyType);
 	}
 }
