@@ -85,7 +85,10 @@ public class FlashController {
 		cameraInitThread.start();
 	}
 
-	private void initCamera() {
+	/*
+	 * 回到桌面的时候需要调用一次
+	 */
+	public void initCamera() {
 		initCamera(hasCameraReleased());
 	}
 
@@ -99,6 +102,7 @@ public class FlashController {
 			parameters = camera.getParameters();
 			if (needReconnect && currentLevel > LEVEL_OFF) {
 				currentLevel = LEVEL_OFF;
+				notifyFlashLevelChanged();//重新打开需要通知对应的观察者
 			}
 		}
 	}

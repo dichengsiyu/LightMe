@@ -227,7 +227,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 *  如果在锁屏界面才监听电话
 	 */
 	private void handleScreenOn() {
-		initLisense();
+//		initLisense();
 		if (!isKeyguardScreen()) {
 			if (isKeyguardServiceAlive)
 				mKeyguardPanelManager.hidePanel();
@@ -467,8 +467,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				this.cancel();
 			} else {
 				boolean isHome = isHome();
-				if (isHome && isHomeLastInterval == false)
+				if (isHome && isHomeLastInterval == false) {
+					flashController.initCamera();
 					requestShowLauncherPanel();
+				}
 				else if(isHome == false && isHomeLastInterval == true)
 					requestHideLauncherPanel();
 			}

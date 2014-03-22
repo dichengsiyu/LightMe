@@ -74,12 +74,12 @@ public class MNotificationHelper {
 		PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		builder.setContentIntent(pi);
 		mManager.notify(NOTIFICATION_TYPE_CLOSE_PANEL, builder.build());
-		cancelPanelOpenNotify(NOTIFICATION_TYPE_LAUCHER_PANEL);
-		cancelPanelOpenNotify(NOTIFICATION_TYPE_KEYGUARD_PANEL);
-		cancelPanelOpenNotify(NOTIFICATION_TYPE_KEYGUARD_SHOCK);
+		cancelNotify(NOTIFICATION_TYPE_LAUCHER_PANEL);
+		cancelNotify(NOTIFICATION_TYPE_KEYGUARD_PANEL);
+		cancelNotify(NOTIFICATION_TYPE_KEYGUARD_SHOCK);
 	}
 	
-	public void cancelPanelOpenNotify(int notifyType) {
+	public void cancelNotify(int notifyType) {
 		mManager.cancel(notifyType);
 	}
 }
