@@ -61,6 +61,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	private TelephonyManager mTelephonyManager;
 	private PhoneStateListener mPhoneStateListener;
 	private KeyguardManager mKeyguardManager;
+	private MNotificationHelper notifyHelper;
 	private Handler mHandler = new Handler();
 	private FlashController flashController;
 
@@ -88,6 +89,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		mShakeDetector.registerOnShakeListener(this);
 		mKeyguardManager = (KeyguardManager) appContext
 				.getSystemService(Context.KEYGUARD_SERVICE);
+		notifyHelper = new MNotificationHelper();
 		//这个只在锁屏界面才需要监听
 		mPhoneStateListener = new PhoneStateListener() {
 			int lastState = TelephonyManager.CALL_STATE_IDLE;
@@ -237,7 +239,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 					mKeyguardPanelManager.hidePanel();
 				} else {
 					mKeyguardPanelManager.showPanel();//灭屏、亮屏都show
-					mKeyguardPanelManager.showHint();
+					mKeyguardPanelManager.updateWhenVisiable();
 					if (mPrefsManager.isKeyguardShockEnable()) {
 						mShakeDetector.start();
 					}
@@ -333,6 +335,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			// stopService
 			//FIXME 这样会导致只打开锁屏的时候会有一段时间关闭锁屏开关
 			stopForeground(true);
+			notifyHelper.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_LAUCHER_PANEL);
 		}
 	}
 
@@ -396,6 +399,9 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			
 			//如果是可以摇动的时候
 			mShakeDetector.stop();
+			
+			notifyHelper.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_PANEL);
+			notifyHelper.cancelPanelOpenNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_SHOCK);
 		}
 	}
 
@@ -501,8 +507,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		if(flashController.islisenseEnable() == false) {
 			handleStop(ACTION_PANEL_SERVICE);
 			mPrefsManager.setNeedRefreshSetting(true);
-			MNotificationHelper notify = new MNotificationHelper();
-			notify.notifyPanelCloseWhenLock();
+			notifyHelper.notifyPanelCloseWhenLock();
 		}
 	}
 

@@ -56,7 +56,7 @@ public class KeyguardPanelManager extends BasePanelManager implements
 	}
 	
 	//FIXME 需要判断动画是否已经执行完毕
-	public void showHint() {
+	public void updateWhenVisiable() {
 		if(hintAnimation == null)
 			hintAnimation = AnimationUtils.loadAnimation(mContext, R.anim.keyguard_shock_hint);
 		mPanelView.startAnimation(hintAnimation);
