@@ -51,25 +51,26 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 
 	private LauncherPanelManager mLauncherPanelManager;
 	private KeyguardPanelManager mKeyguardPanelManager;
+	private FlashController flashController;
+	private MLisenseMangaer lisenseManager;
+	
 	private Timer mLauncherRefreshTimer;
 	private LauncherRefreshTask mLauncherRefreshTask;
+	
+	private MPreferenceManager mPrefsManager;
+	private MNotificationHelper notifyHelper;
 	private ActivityManager mActivityManager;
 	private Vibrator mVibrator;
 	private SystemReceiver mSystemReceiver;
-	private MPreferenceManager mPrefsManager;
 	private ShakeDetector mShakeDetector;
 	private TelephonyManager mTelephonyManager;
 	private PhoneStateListener mPhoneStateListener;
 	private KeyguardManager mKeyguardManager;
-	private MNotificationHelper notifyHelper;
 	private Handler mHandler = new Handler();
-	private FlashController flashController;
 
 	private boolean isKeyguardServiceAlive, isLauncherServiceAlive;
 	private boolean isHomeLastInterval = false;
 	
-	private MLisenseMangaer lisenseManager;
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -116,7 +117,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.v(TAG, "onStartCommand()");
 		if (intent != null) {
 			String action = intent.getAction();
 			int controlType = intent.getIntExtra(CONTROL_TYPE_KEY,
@@ -145,12 +145,9 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	}
 
 	private void releaseData() {
-		stopLauncherPanel();
-		stopKeyguardPanel();
 		flashController = null;
 		mActivityManager = null;
 		mVibrator = null;
-		mSystemReceiver = null;
 		mPrefsManager = null;
 		
 		if(mShakeDetector != null) {
@@ -162,6 +159,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			mTelephonyManager.listen(mPhoneStateListener
 					, PhoneStateListener.LISTEN_NONE);
 		}
+		
+		if (mSystemReceiver != null)
+			FlashApp.getContext().unregisterReceiver(mSystemReceiver);
+		mSystemReceiver = null;
 	}
 
 	@Override
@@ -212,10 +213,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		}
 
 		if (!isLauncherServiceAlive && !isKeyguardServiceAlive) {
-			if (mSystemReceiver != null)
-				FlashApp.getContext().unregisterReceiver(mSystemReceiver);
-			mSystemReceiver = null;
-			
 			stopSelf();
 		}
 	}
@@ -230,6 +227,16 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 */
 	private void handleScreenOn() {
 //		initLisense();
+		//FIXME 需要优化的策略，原则1. 尽量节省资源 2. 不要影响效果
+		if(!flashController.isFlashOn()) {
+			flashController.initCameraSync();
+		} else {
+			if(flashController.hasCameraReleased()) {
+				flashController.turnFlashOffWhenCameraReleased();
+				flashController.initCameraSync();
+			}
+		}
+		
 		if (!isKeyguardScreen()) {
 			if (isKeyguardServiceAlive)
 				mKeyguardPanelManager.hidePanel();
@@ -249,11 +256,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				mTelephonyManager.listen(mPhoneStateListener
 					, PhoneStateListener.LISTEN_CALL_STATE);
 			}
-		}
-		
-		//FIXME 需要优化的策略，原则1. 尽量节省资源 2. 不要影响效果
-		if(!flashController.isFlashOn()) {
-			flashController.initCameraSync();
 		}
 	}
 
@@ -368,6 +370,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	}
 	
 	private void showLauncherPanel() {
+		if(flashController.hasCameraReleased()) {
+			flashController.turnFlashOffWhenCameraReleased();
+			flashController.initCameraSync();
+		}
 		mLauncherPanelManager.showPanel();
 		isHomeLastInterval = true;
 	}
@@ -397,8 +403,14 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			mKeyguardPanelManager.closePanel();
 			mKeyguardPanelManager = null;
 			
-			//如果是可以摇动的时候
+//			//如果是可以摇动的时候
 			mShakeDetector.stop();
+			
+			//关闭监听
+			if(mTelephonyManager != null) {
+				mTelephonyManager.listen(mPhoneStateListener
+						, PhoneStateListener.LISTEN_NONE);
+			}
 			
 			notifyHelper.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_PANEL);
 			notifyHelper.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_SHOCK);
@@ -407,10 +419,8 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 
 	private boolean isHome() {
 		boolean isHome = false;
-//		if(mActivityManager != null) {
-			List<RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
-			isHome = getHomes().contains(tasks.get(0).topActivity.getClassName());
-//		}
+		List<RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
+		isHome = getHomes().contains(tasks.get(0).topActivity.getClassName());
 		return isHome;
 	}
 
@@ -453,15 +463,19 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	
 	//FIXME 这个地方还是有闪动的情况
 	private void startLauncherRefreshTask(long delay, long period) {
+		boolean isNewTask = true;
 		if(mLauncherRefreshTask == null) {
 			mLauncherRefreshTask = new LauncherRefreshTask();
 		} else {
-			if(mLauncherRefreshTask.isRunning())
-				mLauncherRefreshTask.cancelSelf();
-			mLauncherRefreshTask = new LauncherRefreshTask();
+			if(!mLauncherRefreshTask.isRunning()) {
+				mLauncherRefreshTask = new LauncherRefreshTask();
+			} else {
+				isNewTask = false;
+			}
 		}
 		
-		mLauncherRefreshTimer.schedule(mLauncherRefreshTask, delay, period);
+		if(isNewTask)
+			mLauncherRefreshTimer.schedule(mLauncherRefreshTask, delay, period);
 	}
 	
 	private class LauncherRefreshTask extends TimerTask {
@@ -499,7 +513,8 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			lisenseManager.bindRemoteService();
 		}
 	}
-
+	
+	//FIXME 现在的逻辑是主界面锁住了，跳转到launcher的panel仍然存在
 	@Override
 	public void onRemoteServiceConnected() {
 		int lisenseState = lisenseManager.doRemoteCheck();
@@ -508,7 +523,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		
 		if(flashController.islisenseEnable() == false) {
 			handleStop(ACTION_PANEL_SERVICE);
-			mPrefsManager.setNeedRefreshSetting(true);
 			notifyHelper.notifyPanelCloseWhenLock();
 		}
 	}

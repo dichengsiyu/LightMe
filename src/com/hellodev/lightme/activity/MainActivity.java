@@ -73,6 +73,9 @@ public class MainActivity extends Activity implements
 		super.onResume();
 		flashController.addObserver(this);
 //		initLisense();
+		if(flashController.hasCameraReleased()) {
+			flashController.turnFlashOffWhenCameraReleased();
+		}
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}
@@ -205,8 +208,6 @@ public class MainActivity extends Activity implements
 			guideView.setTextColor(Color.WHITE);
 			guideViewMgr.add(guideView, Gravity.CENTER_HORIZONTAL
 					| Gravity.BOTTOM, 0, flashViewGuideY, true);
-
-			// flashView.setFlashLevel(flashController.toggleFlash());
 		}
 	}
 

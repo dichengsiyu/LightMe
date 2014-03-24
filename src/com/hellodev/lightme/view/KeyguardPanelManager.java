@@ -1,7 +1,6 @@
 package com.hellodev.lightme.view;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
@@ -52,6 +51,7 @@ public class KeyguardPanelManager extends BasePanelManager implements
 			setWindowPosition(PANEL_VIEW_DOCK_X, PANEL_VIEW_DOCK_Y);
 			flashController.addObserver(this);
 		}
+		
 		setFlashLevel(flashController.getCurrentLevel());
 	}
 	
@@ -114,9 +114,7 @@ public class KeyguardPanelManager extends BasePanelManager implements
 				if (isClearPanelFocused) {
 					MPreferenceManager mPrefsMgr = MPreferenceManager
 							.getInstance();
-					mPrefsMgr.toggleKeyguardShock(false);
-					mPrefsMgr.toggleKeyguardPanel(false);
-					mPrefsMgr.setNeedRefreshSetting(true);
+					mPrefsMgr.toggleKeyguardPanel(false, true);
 					ServiceHelper.stopKeyguardPanelService();
 				} else {
 					dock();

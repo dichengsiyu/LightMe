@@ -45,6 +45,7 @@ public class FlashController {
 	private FlashHelper flashHelper;
 
 	private Object CAMERA_LOCK = new Object();
+	private boolean isCameraInited = false;
 
 	// FIXME 执行完毕之后是否需要显式去停止
 	private Runnable cameraInitTask = new Runnable() {
@@ -94,15 +95,18 @@ public class FlashController {
 
 	private void initCamera(boolean needReconnect) {
 		synchronized (CAMERA_LOCK) {
-			if (needReconnect && camera != null) {
-				camera = null;
-			}
-			if (camera == null)
-				camera = Camera.open();
-			parameters = camera.getParameters();
-			if (needReconnect && currentLevel > LEVEL_OFF) {
-				currentLevel = LEVEL_OFF;
-				notifyFlashLevelChanged();//重新打开需要通知对应的观察者
+			if(isCameraInited == false) {
+				if (needReconnect && camera != null) {
+					camera = null;
+				}
+				if (camera == null)
+					camera = Camera.open();
+				parameters = camera.getParameters();
+				if (needReconnect && currentLevel > LEVEL_OFF) {
+					currentLevel = LEVEL_OFF;
+					notifyFlashLevelChanged();//重新打开需要通知对应的观察者
+				}
+				isCameraInited = true;
 			}
 		}
 	}
@@ -119,6 +123,7 @@ public class FlashController {
 					Log.v(TAG, "camera already released");
 				}
 				camera = null;
+				isCameraInited = false;
 			}
 		}
 	}
@@ -249,13 +254,17 @@ public class FlashController {
 				initCamera(true);
 				parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
 			}
-			currentLevel = LEVEL_OFF;
-			flashOpenTimeMills = 0;
-
-			cancelAutoCloseTask();
+			turnFlashOffWhenCameraReleased();
 
 			playSwitchSound();
 		}
+	}
+	
+	public void turnFlashOffWhenCameraReleased() {
+		currentLevel = LEVEL_OFF;
+		flashOpenTimeMills = 0;
+
+		cancelAutoCloseTask();
 	}
 
 	/*
@@ -284,6 +293,7 @@ public class FlashController {
 				parameters = camera.getParameters();
 			} catch (RuntimeException re) {
 				hasReleased = true;
+				isCameraInited = false;
 			}
 		}
 		return hasReleased;
@@ -315,11 +325,9 @@ public class FlashController {
 			if(!lisenseEnable) {
 				//关闭对应设置项，并通知更新
 				MPreferenceManager prefsMgr = MPreferenceManager.getInstance();
-				prefsMgr.toggleKeyguardShock(false);
-				prefsMgr.toggleKeyguardPanel(false);
-				prefsMgr.toggleLauncherPanel(false);
-				
-				prefsMgr.setNeedRefreshSetting(true);
+				prefsMgr.toggleKeyguardPanel(false, true);
+				prefsMgr.toggleLauncherPanel(false, true);
+				//FIXME preference的写入考虑使用队列的形式
 			}
 		}
 	}

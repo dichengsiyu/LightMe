@@ -46,6 +46,11 @@ public class LauncherPanelManager extends BasePanelManager implements
 			setWindowPosition(mLastX, mLastY);
 			flashController.addObserver(this);
 		}
+		
+		if(flashController.hasCameraReleased()) {
+			flashController.turnFlashOffWhenCameraReleased();
+		}
+		
 		setFlashLevel(flashController.getCurrentLevel());
 	}
 
@@ -113,9 +118,7 @@ public class LauncherPanelManager extends BasePanelManager implements
 
 			if (mIsLongPressing) {
 				if (isClearPanelFocused) {
-					MPreferenceManager.getInstance().toggleLauncherPanel(false);
-					MPreferenceManager.getInstance()
-							.setNeedRefreshSetting(true);
+					MPreferenceManager.getInstance().toggleLauncherPanel(false, true);
 					ServiceHelper.stopLauncherPanelService();
 				} else {
 					smoothMoveTo((int) mInitialX, (int) mInitialY);
