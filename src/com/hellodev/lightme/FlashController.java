@@ -91,7 +91,7 @@ public class FlashController {
 	public void initCamera() {
 		initCamera(hasCameraReleased());
 	}
-
+	
 	private void initCamera(boolean needReconnect) {
 		synchronized (CAMERA_LOCK) {
 			if (needReconnect && camera != null) {
@@ -100,13 +100,13 @@ public class FlashController {
 			if (camera == null)
 				camera = Camera.open();
 			parameters = camera.getParameters();
-			if (needReconnect && currentLevel > LEVEL_OFF) {
-				currentLevel = LEVEL_OFF;
-				notifyFlashLevelChanged();//重新打开需要通知对应的观察者
+			
+			if(needReconnect) {
+				turnFlashOffIfCameraReleased();
 			}
 		}
 	}
-
+	
 	/*
 	 * 关灯灭屏时释放Camera，亮屏幕时不着急调用，首次调用时打开
 	 */
@@ -257,7 +257,16 @@ public class FlashController {
 			playSwitchSound();
 		}
 	}
-
+	
+	public void turnFlashOffIfCameraReleased() {
+		if(currentLevel > LEVEL_OFF) {
+			currentLevel = LEVEL_OFF;
+			flashOpenTimeMills = 0;
+	
+			cancelAutoCloseTask();
+		}
+	}
+	
 	/*
 	 * 调节亮度需要lisenseEnable才可以
 	 */

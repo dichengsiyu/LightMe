@@ -73,6 +73,10 @@ public class MainActivity extends Activity implements
 		super.onResume();
 		flashController.addObserver(this);
 //		initLisense();
+		if(flashController.hasCameraReleased()) {
+			flashController.turnFlashOffIfCameraReleased();
+			flashController.initCameraSync();
+		}
 		flashView.setFlashLevel(flashController.getCurrentLevel());
 		MobclickAgent.onResume(this);
 	}

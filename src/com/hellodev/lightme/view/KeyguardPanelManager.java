@@ -1,7 +1,6 @@
 package com.hellodev.lightme.view;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
@@ -56,7 +55,7 @@ public class KeyguardPanelManager extends BasePanelManager implements
 	}
 	
 	//FIXME 需要判断动画是否已经执行完毕
-	public void updateWhenVisiable() {
+	public void updatePanelWhenVisiable() {
 		if(hintAnimation == null)
 			hintAnimation = AnimationUtils.loadAnimation(mContext, R.anim.keyguard_shock_hint);
 		mPanelView.startAnimation(hintAnimation);

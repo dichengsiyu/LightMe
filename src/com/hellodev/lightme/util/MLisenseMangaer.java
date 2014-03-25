@@ -151,7 +151,7 @@ public class MLisenseMangaer {
 			} else {
 				// license验证服务验证不通过
 				lisenseState = STATE_UNKNOWN;// 用友盟来统计？
-				if (result.getResponseCode() == LicenseResult.RESPONSE_CODE_NO_LICENSE_FILE) {
+				if (result!= null && result.getResponseCode() == LicenseResult.RESPONSE_CODE_NO_LICENSE_FILE) {
 					// 不存在与应用对应的license文件
 					Log.e(TAG, "无对应的license文件");
 				} else {

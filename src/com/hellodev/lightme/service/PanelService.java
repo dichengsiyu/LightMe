@@ -140,17 +140,19 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
 		releaseData();
+		super.onDestroy();
 	}
 
 	private void releaseData() {
-		stopLauncherPanel();
-		stopKeyguardPanel();
+		//FIXME 只有调用stop才会执行这一步，unregister放在这里
+		if (mSystemReceiver != null)
+			FlashApp.getContext().unregisterReceiver(mSystemReceiver);
+		mSystemReceiver = null;
+		
 		flashController = null;
 		mActivityManager = null;
 		mVibrator = null;
-		mSystemReceiver = null;
 		mPrefsManager = null;
 		
 		if(mShakeDetector != null) {
@@ -212,10 +214,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		}
 
 		if (!isLauncherServiceAlive && !isKeyguardServiceAlive) {
-			if (mSystemReceiver != null)
-				FlashApp.getContext().unregisterReceiver(mSystemReceiver);
-			mSystemReceiver = null;
-			
 			stopSelf();
 		}
 	}
@@ -230,6 +228,12 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 */
 	private void handleScreenOn() {
 //		initLisense();
+		//FIXME 需要优化的策略，原则1. 尽量节省资源 2. 不要影响效果
+		if(flashController.hasCameraReleased()) {
+			flashController.turnFlashOffIfCameraReleased();
+			flashController.initCameraSync();
+		}
+		
 		if (!isKeyguardScreen()) {
 			if (isKeyguardServiceAlive)
 				mKeyguardPanelManager.hidePanel();
@@ -239,7 +243,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 					mKeyguardPanelManager.hidePanel();
 				} else {
 					mKeyguardPanelManager.showPanel();//灭屏、亮屏都show
-					mKeyguardPanelManager.updateWhenVisiable();
+					mKeyguardPanelManager.updatePanelWhenVisiable();
 					if (mPrefsManager.isKeyguardShockEnable()) {
 						mShakeDetector.start();
 					}
@@ -250,15 +254,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 					, PhoneStateListener.LISTEN_CALL_STATE);
 			}
 		}
-		
-		//FIXME 需要优化的策略，原则1. 尽量节省资源 2. 不要影响效果
-		if(!flashController.isFlashOn()) {
-			flashController.initCameraSync();
-		}
 	}
 
 	/*
-	 * 调用时机： 1. 灭屏的时候 2. 通话的时候
+	 * 调用时机： 1. 灭屏的时候 2. 通话的时候会导致灭屏幕
 	 * 
 	 * * 灭屏幕的时候是否会被杀掉，杀掉之后的处理方式
 	 */
@@ -283,6 +282,12 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		//FIXME 需要优化的策略
 		if(!flashController.isFlashOn()) {
 			flashController.releaseCamera();
+		} else {
+			//如果是亮着的需要判断一下相机是否已经被占用
+			if(flashController.hasCameraReleased()) {
+				flashController.turnFlashOffIfCameraReleased();
+				flashController.initCameraSync();
+			}
 		}
 	}
 
@@ -339,9 +344,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		}
 	}
 
-	/*
-	 * 如果lisense过期，关闭Launcher
-	 */
 	private void requestShowLauncherPanel() {
 		// 当前界面是桌面，且没有悬浮窗显示，则创建悬浮窗。postRunnable的原因是因为timerTask
 		mHandler.post(new Runnable() {
@@ -402,15 +404,19 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			
 			notifyHelper.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_PANEL);
 			notifyHelper.cancelNotify(MNotificationHelper.NOTIFICATION_TYPE_KEYGUARD_SHOCK);
+			
+			//如果锁屏插件关闭，关闭监听
+			if(mTelephonyManager != null) {
+				mTelephonyManager.listen(mPhoneStateListener
+						, PhoneStateListener.LISTEN_NONE);
+			}
 		}
 	}
 
 	private boolean isHome() {
 		boolean isHome = false;
-//		if(mActivityManager != null) {
-			List<RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
-			isHome = getHomes().contains(tasks.get(0).topActivity.getClassName());
-//		}
+		List<RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
+		isHome = getHomes().contains(tasks.get(0).topActivity.getClassName());
 		return isHome;
 	}
 
@@ -474,7 +480,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			} else {
 				boolean isHome = isHome();
 				if (isHome && isHomeLastInterval == false) {
-					flashController.initCamera();
+					if(flashController.hasCameraReleased()) {
+						flashController.turnFlashOffIfCameraReleased();
+						flashController.initCameraSync();
+					}
 					requestShowLauncherPanel();
 				}
 				else if(isHome == false && isHomeLastInterval == true)
