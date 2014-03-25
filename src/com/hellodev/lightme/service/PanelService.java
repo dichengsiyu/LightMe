@@ -186,7 +186,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			mSystemReceiver = new SystemReceiver();
 			FlashApp.getContext().registerReceiver(mSystemReceiver, filter);
 		}
-
+		
 		if (ACTION_LAUNCHER.equals(action))
 			startLauncherPanel();
 		else if (ACTION_KEYGUARD.equals(action))
@@ -290,7 +290,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			//如果是亮着的需要判断一下相机是否已经被占用
 			if(flashController.hasCameraReleased()) {
 				flashController.turnFlashOffIfCameraReleased();
-				flashController.initCameraSync();
 			}
 		}
 	}
@@ -326,6 +325,9 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			if (!isKeyguardScreen()) {
 				// 如果覆盖安装了，这个时候启动LauncherPanel不应该开始轮询，而应该等到user_present的时候
 				startLauncherRefreshTask(0, 1000);
+			} else {
+				//如果覆盖安装的地方在锁屏，如果不初始化则无法进行后续处理
+				mLauncherRefreshTask = new LauncherRefreshTask();
 			}
 			
 			//foreground

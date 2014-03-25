@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="right|center_vertical">
+    android:layout_height="match_parent"
+    android:layout_gravity="right|center_vertical"
+    android:orientation="horizontal"
+    android:gravity="center_vertical" >
 
     <ImageButton
-        android:visibility="gone"
         android:id="@+id/btn_lock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
+        android:layout_width="50dip"
+        android:layout_height="match_parent"
+        android:layout_marginRight="-25dip"
         android:contentDescription="@string/lock_subject"
-        android:src="@drawable/selector_btn_lock_small" />
+        android:src="@drawable/selector_btn_lock_small"
+        android:background="@drawable/selector_action_btn_bg" 
+        android:scaleType="center"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/action_feedback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dip"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dip"
-        android:layout_marginRight="36dip"
-        android:background="@null"
+        android:layout_marginRight="25dip"
         android:contentDescription="@string/feedback"
-        android:src="@drawable/action_btn_feedback" />
+        android:scaleType="center"
+        android:src="@drawable/action_btn_feedback"
+        android:background="@drawable/selector_action_btn_bg" />
 
 </LinearLayout>

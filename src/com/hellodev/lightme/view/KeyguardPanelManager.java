@@ -106,6 +106,9 @@ public class KeyguardPanelManager extends BasePanelManager implements
 				float panelBottom = y + PANEL_VIEW_HEIGHT;
 				toggleClearPanelFocusChanged(panelBottom);
 				moveTo(x, y);
+				
+				if (flashController.isFlashOn())
+					changeFlashLightWithMove(mDownY, y);
 			}
 			break;
 		case MotionEvent.ACTION_UP:

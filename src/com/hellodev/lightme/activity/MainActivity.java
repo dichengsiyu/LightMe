@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hellodev.lightme.FlashController;
@@ -133,7 +132,6 @@ public class MainActivity extends Activity implements
 	@Override
 	public void onSwitchTurnDown() {
 		flashView.setFlashLevel(flashController.turnFlashDown());
-		closeGuideView();
 	}
 
 	@Override
@@ -200,13 +198,15 @@ public class MainActivity extends Activity implements
 			guideViewMgr = new GuideViewManager(this.getWindowManager(),
 					WindowManager.LayoutParams.TYPE_TOAST);
 			MDisplayHelper displayHelper = new MDisplayHelper();
-			int flashViewGuideY = displayHelper.dpiToPx(100);
+			int flashViewGuideY = displayHelper.dpiToPx(50);
 
+//			TextView guideView = new TextView(this);
+//			guideView.setTextSize(displayHelper.dpiToPx(11));
+//			guideView.setText(R.string.guide_main);
+//			guideView.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+//			guideView.setTextColor(Color.WHITE);
 			TextView guideView = new TextView(this);
-			guideView.setTextSize(displayHelper.dpiToPx(11));
-			guideView.setText(R.string.guide_main);
-			guideView.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-			guideView.setTextColor(Color.WHITE);
+			guideView.setBackgroundResource(R.drawable.guide_text);
 			guideViewMgr.add(guideView, Gravity.CENTER_HORIZONTAL
 					| Gravity.BOTTOM, 0, flashViewGuideY, true);
 		}

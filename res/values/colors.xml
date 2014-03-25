@@ -13,4 +13,5 @@
     <color name="about_app_description">#88888888</color>
     <color name="about_member_description">#999999</color>
     <color name="guide_action_bar">#0e0e0e</color>
+    <color name="action_btn_bg">#a2d2eb</color>
 </resources>
