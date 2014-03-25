@@ -198,7 +198,7 @@ public class MainActivity extends Activity implements
 			guideViewMgr = new GuideViewManager(this.getWindowManager(),
 					WindowManager.LayoutParams.TYPE_TOAST);
 			MDisplayHelper displayHelper = new MDisplayHelper();
-			int flashViewGuideY = displayHelper.dpiToPx(50);
+			int flashViewGuideY = displayHelper.dpiToPx(30);
 
 //			TextView guideView = new TextView(this);
 //			guideView.setTextSize(displayHelper.dpiToPx(11));
