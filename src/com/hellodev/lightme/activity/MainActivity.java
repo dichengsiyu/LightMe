@@ -200,11 +200,6 @@ public class MainActivity extends Activity implements
 			MDisplayHelper displayHelper = new MDisplayHelper();
 			int flashViewGuideY = displayHelper.dpiToPx(30);
 
-//			TextView guideView = new TextView(this);
-//			guideView.setTextSize(displayHelper.dpiToPx(11));
-//			guideView.setText(R.string.guide_main);
-//			guideView.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-//			guideView.setTextColor(Color.WHITE);
 			TextView guideView = new TextView(this);
 			guideView.setBackgroundResource(R.drawable.guide_text);
 			guideViewMgr.add(guideView, Gravity.CENTER_HORIZONTAL
