@@ -71,7 +71,7 @@ public class MainActivity extends Activity implements
 	protected void onResume() {
 		super.onResume();
 		flashController.addObserver(this);
-//		initLisense();
+		initLisense();
 		if(flashController.hasCameraReleased()) {
 			flashController.turnFlashOffIfCameraReleased();
 			flashController.initCameraSync();
@@ -198,7 +198,7 @@ public class MainActivity extends Activity implements
 			guideViewMgr = new GuideViewManager(this.getWindowManager(),
 					WindowManager.LayoutParams.TYPE_TOAST);
 			MDisplayHelper displayHelper = new MDisplayHelper();
-			int flashViewGuideY = displayHelper.dpiToPx(30);
+			int flashViewGuideY = displayHelper.dpiToPx(25);
 
 			TextView guideView = new TextView(this);
 			guideView.setBackgroundResource(R.drawable.guide_text);
