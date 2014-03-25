@@ -39,9 +39,11 @@ public class MPreferenceManager {
 		return mInstance;
 	}
 	
-	public void toggleLauncherPanel(boolean setShown) {
+	public void toggleLauncherPanel(boolean setShown, boolean needRefreshSetting) {
 		Editor edit = mPrefs.edit();
 		edit.putBoolean(KEY_SHOW_LAUNCHER_PANEL, setShown);
+		if(needRefreshSetting)
+			edit.putBoolean(KEY_NEED_REFRESH_SETTING, needRefreshSetting);
 		edit.commit();
 	}
 	
@@ -59,9 +61,13 @@ public class MPreferenceManager {
 		return mPrefs.getLong(KEY_FIRST_SHOW_LAUNCHER, 0);
 	}
 	
-	public void toggleKeyguardPanel(boolean setShown) {
+	public void toggleKeyguardPanel(boolean setShown, boolean needRefreshSetting) {
 		Editor edit = mPrefs.edit();
 		edit.putBoolean(KEY_SHOW_KEYGUARD_PANEL, setShown);
+		if(setShown == false)
+			edit.putBoolean(KEY_KEYGURAD_SHOCK_ENABLE, false);
+		if(needRefreshSetting)
+			edit.putBoolean(KEY_NEED_REFRESH_SETTING, needRefreshSetting);
 		edit.commit();
 	} 
 	

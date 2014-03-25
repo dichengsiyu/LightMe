@@ -209,8 +209,6 @@ public class MainActivity extends Activity implements
 			guideView.setTextColor(Color.WHITE);
 			guideViewMgr.add(guideView, Gravity.CENTER_HORIZONTAL
 					| Gravity.BOTTOM, 0, flashViewGuideY, true);
-
-			// flashView.setFlashLevel(flashController.toggleFlash());
 		}
 	}
 
