@@ -22,7 +22,7 @@
         android:layout_width="50dip"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dip"
-        android:layout_marginRight="25dip"
+        android:layout_marginRight="23dip"
         android:contentDescription="@string/feedback"
         android:scaleType="center"
         android:src="@drawable/action_btn_feedback"
