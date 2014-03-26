@@ -69,7 +69,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	private Handler mHandler = new Handler();
 
 	private boolean isKeyguardServiceAlive, isLauncherServiceAlive;
-	private boolean isHomeLastInterval = false;
 	
 	@Override
 	public void onCreate() {
@@ -330,6 +329,9 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				mLauncherRefreshTask = new LauncherRefreshTask();
 			}
 			
+			//FIXME
+			//startLauncherRefreshTask(0, 1000);//因为有密码的时候可能需要进入其他界面，这个时候也应该轮询
+			
 			//foreground
 			startForeground(1000, new Notification());
 		}
@@ -381,12 +383,10 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			flashController.initCameraSync();
 		}
 		mLauncherPanelManager.showPanel();
-		isHomeLastInterval = true;
 	}
 	
 	private void hideLauncherPanel() {
 		mLauncherPanelManager.hidePanel();
-		isHomeLastInterval = false;
 	}
 
 	/*
@@ -499,14 +499,14 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 				this.cancel();
 			} else {
 				boolean isHome = isHome();
-				if (isHome && isHomeLastInterval == false) {
+				boolean hasLauncherPanelShown = mLauncherPanelManager.isPanelShown();
+				if (isHome && hasLauncherPanelShown == false) {
 					if(flashController.hasCameraReleased()) {
 						flashController.turnFlashOffIfCameraReleased();
 						flashController.initCameraSync();
 					}
 					requestShowLauncherPanel();
-				}
-				else if(isHome == false && isHomeLastInterval == true)
+				} else if(isHome == false && hasLauncherPanelShown == true)
 					requestHideLauncherPanel();
 			}
 		}

@@ -33,7 +33,7 @@ public class KeyguardPanelManager extends BasePanelManager implements
 				R.drawable.keyguard_off);
 		PANEL_VIEW_WIDTH = panelDrawable.getIntrinsicWidth();
 		PANEL_VIEW_HEIGHT = panelDrawable.getIntrinsicHeight();
-		PANEL_VIEW_DOCK_OFFSET_Y = mDisplayHelper.dpiToPx(165);
+		PANEL_VIEW_DOCK_OFFSET_Y = mDisplayHelper.dpiToPx(163);
 		PANEL_VIEW_DOCK_X = (SCREEN_WIDTH - PANEL_VIEW_WIDTH) / 2;
 		PANEL_VIEW_DOCK_Y = SCREEN_HEIGHT - PANEL_VIEW_DOCK_OFFSET_Y;
 
