@@ -71,7 +71,7 @@ public class MainActivity extends Activity implements
 	protected void onResume() {
 		super.onResume();
 		flashController.addObserver(this);
-//		initLisense();
+		initLisense();
 		if(flashController.hasCameraReleased()) {
 			flashController.turnFlashOffIfCameraReleased();
 			flashController.initCameraSync();
