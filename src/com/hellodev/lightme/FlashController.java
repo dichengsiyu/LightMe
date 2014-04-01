@@ -101,13 +101,17 @@ public class FlashController {
 				}
 				if (camera == null)
 					camera = Camera.open();
-				parameters = camera.getParameters();
+				try {
+					parameters = camera.getParameters();
+				} catch (RuntimeException re) {
+					parameters = null;
+				}
 				if (needReconnect && currentLevel > LEVEL_OFF) {
 					currentLevel = LEVEL_OFF;
 					notifyFlashLevelChanged();//重新打开需要通知对应的观察者
 					turnFlashOffIfCameraReleased();
 				}
-				isCameraInited = true;
+				isCameraInited = parameters != null;
 			}
 		}
 	}
@@ -230,7 +234,7 @@ public class FlashController {
 	}
 
 	private void turnFlashOn() {
-		if (currentLevel == LEVEL_OFF) {
+		if (isCameraInited && currentLevel == LEVEL_OFF) {
 			parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
 			try {
 				camera.setParameters(parameters);
@@ -247,7 +251,7 @@ public class FlashController {
 	}
 
 	public void turnFlashOff() {
-		if (currentLevel > LEVEL_OFF) {
+		if (isCameraInited && currentLevel > LEVEL_OFF) {
 			parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
 			try {
 				camera.setParameters(parameters);
@@ -292,7 +296,10 @@ public class FlashController {
 
 	public boolean hasCameraReleased() {
 		boolean hasReleased = false;
-		if (camera != null) {
+		if(camera == null) {
+			hasReleased = true;
+			isCameraInited = false;
+		} else {
 			try {
 				parameters = camera.getParameters();
 			} catch (RuntimeException re) {

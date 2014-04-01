@@ -35,7 +35,7 @@ public class MNotificationHelper {
 			case NOTIFICATION_TYPE_LAUCHER_PANEL:
 				title = resource.getString(R.string.launcher_panel);
 				content = resource.getString(R.string.notification_launcher_panel_open_content);
-				ticker = resource.getString(R.string.notification_keyguard_shock_enable_ticker);
+				ticker = resource.getString(R.string.notification_launcher_panel_open_ticker);
 				break;
 			case NOTIFICATION_TYPE_KEYGUARD_PANEL:
 				title = resource.getString(R.string.keyguard_panel);
