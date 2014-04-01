@@ -4,8 +4,6 @@ import com.hellodev.lightme.FlashApp;
 import com.hellodev.lightme.FlashController;
 import com.hellodev.lightme.R;
 import com.hellodev.lightme.activity.SettingActivity;
-import com.hellodev.lightme.util.MLisenseMangaer;
-import com.hellodev.lightme.util.MLisenseMangaer.OnLisenseStateChangeListener;
 
 import android.app.AlertDialog;
 import android.app.Service;
@@ -18,7 +16,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.WindowManager;
 
-public class ControlService extends Service implements OnLisenseStateChangeListener{
+public class ControlService extends Service {
 	private final static String TAG = "AUTO_CLOSE";
 	public final static String CONTROL_TYPE_KEY = "control_type";
 	public final static int CONTROL_TYPE_UNKNOWN = 0;
@@ -26,11 +24,9 @@ public class ControlService extends Service implements OnLisenseStateChangeListe
 	public final static int CONTROL_TYPE_CLOSE_ACDIALOG = 2;
 
 	public final static String ACTION_AUTO_CLOSE = "hellodev.service.action.AUTO_CLOSE";
-	public final static String ACTION_CHECK_LISENSE = "hellodev.service.action.CHECK_LISENSE";
 
 	private FlashController flashController;
 	private AlertDialog mAutoCloseDialog;
-	private MLisenseMangaer lisenseManager;
 	
 	private boolean handlingAutoClose,checkingLisense;
 	@Override
@@ -44,14 +40,11 @@ public class ControlService extends Service implements OnLisenseStateChangeListe
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (intent != null) {
 			String action = intent.getAction();
-			Log.v(TAG, "action");
 			if (ACTION_AUTO_CLOSE.equals(action)) {
 				int controlType = intent.getIntExtra(CONTROL_TYPE_KEY, CONTROL_TYPE_UNKNOWN);
 				if(controlType == CONTROL_TYPE_SHOW_ACDIALOG) {
 					showAutoCloseCommand();
 				}
-			} else if(ACTION_CHECK_LISENSE.equals(action)) {
-				requestLisenseCheck();
 			}
 		}
 		return START_NOT_STICKY;
@@ -65,7 +58,6 @@ public class ControlService extends Service implements OnLisenseStateChangeListe
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.v(TAG, "ControlService onDestroy");
 	}
 	
 	private void showAutoCloseCommand() {
@@ -143,33 +135,5 @@ public class ControlService extends Service implements OnLisenseStateChangeListe
 		if(checkingLisense == false) {
 			stopSelf();
 		}
-	}
-	
-	//FIXME 需不需要开一个线程去做，其实没有耗时操作
-	private void requestLisenseCheck() {
-		if(checkingLisense == false) {
-			checkingLisense = true;
-			lisenseManager = new MLisenseMangaer(this);
-			lisenseManager.bindRemoteService();
-		}
-	}
-
-	@Override
-	public void onRemoteServiceConnected() {
-		int lisenseState = lisenseManager.doRemoteCheck();
-		flashController.setLisenseState(lisenseState);
-		lisenseManager.unbindRemoteService();
-	}
-	
-	private void stopLisenseCheckService() {
-		checkingLisense = false;
-		if(handlingAutoClose == false) {
-			stopSelf();
-		}
-	}
-
-	@Override
-	public void onRemoteServiceDisconnected() {
-		stopLisenseCheckService();
 	}
 }

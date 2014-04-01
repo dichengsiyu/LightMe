@@ -252,7 +252,6 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 
 	// 这个是需要的，但是其他的关联操作呢，主要是smoothMove的线程和其他的线程的矛盾
 	protected synchronized void setWindowPosition(int x, int y) {
-		Log.v(TAG, "setWindowPosition by "+this.getClass());
 		mPanelParams.x = x;
 		mPanelParams.y = y;
 		if (isPanelShown)

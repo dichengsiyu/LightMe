@@ -177,7 +177,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 */
 	private void handleStart(String action) {
 		if (!isLauncherServiceAlive && !isKeyguardServiceAlive) {
-			Log.v(TAG, "start receiver");
 			IntentFilter filter = new IntentFilter();
 			filter.addAction(Intent.ACTION_SCREEN_ON);
 			filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -226,7 +225,7 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 	 *  如果在锁屏界面才监听电话
 	 */
 	private void handleScreenOn() {
-//		initLisense();
+		initLisense();
 		//FIXME 需要优化的策略，原则1. 尽量节省资源 2. 不要影响效果
 		if(!flashController.isFlashOn()) {
 			flashController.initCameraSync();

@@ -186,7 +186,6 @@ public class MLisenseMangaer {
 
 	public interface OnLisenseStateChangeListener {
 		public void onRemoteServiceConnected();
-
 		public void onRemoteServiceDisconnected();
 	}
 }

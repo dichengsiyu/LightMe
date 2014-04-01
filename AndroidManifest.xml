@@ -82,7 +82,6 @@
             android:exported="false" >
             <intent-filter>
                 <action android:name="hellodev.service.action.AUTO_CLOSE" />
-                <action android:name="hellodev.service.action.CHECK_LISENSE" />
             </intent-filter>
         </service>
 
