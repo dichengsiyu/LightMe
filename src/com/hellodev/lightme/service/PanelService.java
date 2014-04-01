@@ -342,7 +342,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 			mLauncherRefreshTask.cancelSelf();
 			// closePanel
 			mLauncherPanelManager.closePanel();
-			mLauncherPanelManager = null;
 			
 			// stopService
 			//FIXME 这样会导致只打开锁屏的时候会有一段时间关闭锁屏开关
@@ -406,7 +405,6 @@ public class PanelService extends Service implements OnShakeListener, OnLisenseS
 		if (isKeyguardServiceAlive) {
 			isKeyguardServiceAlive = false;
 			mKeyguardPanelManager.closePanel();
-			mKeyguardPanelManager = null;
 			
 //			//如果是可以摇动的时候
 			mShakeDetector.stop();

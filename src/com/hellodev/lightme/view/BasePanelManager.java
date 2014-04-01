@@ -133,7 +133,7 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 		mVibrator.vibrate(100);
 		mPanelParams.width = PANEL_VIEW_WIDTH + PANEL_PRESSED_INCREMENT;
 		mPanelParams.height = PANEL_VIEW_HEIGHT + PANEL_PRESSED_INCREMENT;
-		wm.updateViewLayout(mPanelView, mPanelParams);
+		updatePanel();
 
 		showClearPanel();
 	}
@@ -141,7 +141,7 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 	protected void onLongPressStateEnd() {
 		mPanelParams.width = PANEL_VIEW_WIDTH;
 		mPanelParams.height = PANEL_VIEW_HEIGHT;
-		wm.updateViewLayout(mPanelView, mPanelParams);
+		updatePanel();
 
 		mIsLongPressing = false;
 		closeClearPanel();
@@ -158,13 +158,13 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 			@Override
 			public void onTick(long millisUntilFinished) {
 				long step = (500 - millisUntilFinished) / 5;
-				setWindowPosition((int) MathHelper.bounceValue(step, currentX),
+				updatePanel((int) MathHelper.bounceValue(step, currentX),
 						mPanelParams.y);
 			}
 
 			@Override
 			public void onFinish() {
-				setWindowPosition(0, mPanelParams.y);
+				updatePanel(0, mPanelParams.y);
 			}
 		}.start();
 	}
@@ -181,14 +181,14 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 			@Override
 			public void onTick(long millisUntilFinished) {
 				long step = (500 - millisUntilFinished) / 5;
-				setWindowPosition(
+				updatePanel(
 						endX - (int) MathHelper.bounceValue(step, distanceX),
 						mPanelParams.y);
 			}
 
 			@Override
 			public void onFinish() {
-				setWindowPosition(SCREEN_WIDTH - PANEL_VIEW_WIDTH,
+				updatePanel(SCREEN_WIDTH - PANEL_VIEW_WIDTH,
 						mPanelParams.y);
 			}
 		}.start();
@@ -222,12 +222,12 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 				} else {
 					y = dstY - (int) MathHelper.bounceValue(step, distanceY);
 				}
-				setWindowPosition(x, y);
+				updatePanel(x, y);
 			}
 
 			@Override
 			public void onFinish() {
-				setWindowPosition(dstX, dstY);
+				updatePanel(dstX, dstY);
 			}
 		}.start();
 	}
@@ -238,7 +238,7 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 	 * 
 	 */
 	protected void moveTo(float dstX, float dstY) {
-		setWindowPosition((int) dstX, (int) dstY);
+		updatePanel((int) dstX, (int) dstY);
 	}
 
 	protected void changeFlashLightWithMove(float startY, float endY) {
@@ -251,17 +251,25 @@ public abstract class BasePanelManager implements OnFlashLevelChangedListener{
 	}
 
 	// 这个是需要的，但是其他的关联操作呢，主要是smoothMove的线程和其他的线程的矛盾
-	protected synchronized void setWindowPosition(int x, int y) {
+	protected synchronized void updatePanel() {
+		if (isPanelShown)
+			wm.updateViewLayout(mPanelView, mPanelParams);
+	}
+	
+	protected synchronized void updatePanel(int x, int y) {
 		mPanelParams.x = x;
 		mPanelParams.y = y;
 		if (isPanelShown)
 			wm.updateViewLayout(mPanelView, mPanelParams);
-		else {
-			wm.addView(mPanelView, mPanelParams);
-			isPanelShown = true;
-		}
 	}
-
+	
+	protected synchronized void addPanel(int x, int y) {
+		mPanelParams.x = x;
+		mPanelParams.y = y;
+		wm.addView(mPanelView, mPanelParams);
+		isPanelShown = true;
+	}
+	
 	protected synchronized void removeWindow() {
 		wm.removeView(mPanelView);
 		isPanelShown = false;

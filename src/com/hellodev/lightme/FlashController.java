@@ -99,9 +99,9 @@ public class FlashController {
 				if (needReconnect && camera != null) {
 					camera = null;
 				}
-				if (camera == null)
-					camera = Camera.open();
 				try {
+					if (camera == null)
+						camera = Camera.open();
 					parameters = camera.getParameters();
 				} catch (RuntimeException re) {
 					parameters = null;

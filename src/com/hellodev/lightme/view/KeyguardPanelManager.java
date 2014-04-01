@@ -48,7 +48,7 @@ public class KeyguardPanelManager extends BasePanelManager implements
 	@Override
 	public void showPanel() {
 		if (!isPanelShown) {
-			setWindowPosition(PANEL_VIEW_DOCK_X, PANEL_VIEW_DOCK_Y);
+			addPanel(PANEL_VIEW_DOCK_X, PANEL_VIEW_DOCK_Y);
 			flashController.addObserver(this);
 		}
 		

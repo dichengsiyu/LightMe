@@ -57,9 +57,13 @@ public class MConnectHelper {
 					targetIntents.add(targetIntent);
 				}
 			}
-
+			
+			if(targetIntents.size() == 0)//FIXME 对于卸载邮箱的用户
+				return ;
+			
 			Intent chooserIntent = Intent.createChooser(
 					targetIntents.remove(0), "选择邮件应用");
+			
 			if (chooserIntent == null)
 				return;
 			chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,

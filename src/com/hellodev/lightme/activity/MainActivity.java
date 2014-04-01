@@ -224,10 +224,11 @@ public class MainActivity extends Activity implements
 	@Override
 	public void onRemoteServiceConnected() {
 		int lisenseState = lisenseManager.doRemoteCheck();
-		flashController.setLisenseState(lisenseState);
 		lisenseManager.unbindRemoteService();
-
-		refreshWhenLisenseChanged(flashController.islisenseEnable());
+		if(flashController != null) {
+			flashController.setLisenseState(lisenseState);
+			refreshWhenLisenseChanged(flashController.islisenseEnable());
+		}
 	}
 
 	@Override

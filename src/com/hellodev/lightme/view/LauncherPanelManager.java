@@ -43,7 +43,7 @@ public class LauncherPanelManager extends BasePanelManager implements
 				mLastY = SCREEN_HEIGHT / 2;
 			}
 
-			setWindowPosition(mLastX, mLastY);
+			addPanel(mLastX, mLastY);
 			flashController.addObserver(this);
 		}
 		
@@ -68,9 +68,6 @@ public class LauncherPanelManager extends BasePanelManager implements
 			mLastX = mPanelParams.x;
 			mLastY = mPanelParams.y;
 			flashController.removeObserver(this);
-
-			// 关闭引导页
-//			closeGuideView();
 		}
 	}
 
