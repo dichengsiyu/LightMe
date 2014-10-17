@@ -70,7 +70,7 @@ public class MainActivity extends Activity implements
 	protected void onResume() {
 		super.onResume();
 		flashController.addObserver(this);
-		initLisense();
+//		initLisense();
 		if(flashController.hasCameraReleased()) {
 			flashController.turnFlashOffIfCameraReleased();
 			flashController.initCameraSync();
@@ -284,7 +284,7 @@ public class MainActivity extends Activity implements
 					new android.content.DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							initLisense();
+//							initLisense();
 						}
 					});
 

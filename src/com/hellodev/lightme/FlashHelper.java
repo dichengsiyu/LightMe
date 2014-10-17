@@ -10,11 +10,8 @@ public class FlashHelper {
 	}
 	
 	protected FlashHelper() {
-		initNativeLibrary();
 	}
 	
-	protected native void initNativeLibrary();
-
 	protected native void changeFlashLight(boolean increasing);
 	
 	public String getCurrentFlashLevel() {
